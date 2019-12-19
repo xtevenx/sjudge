@@ -1,0 +1,12 @@
+Problem: divide
+
+Description:
+    Given two numbers (x, y), find the quotient when `x` is divided by `y`.
+    Any decimals are to be rounded down.
+
+Input Specification:
+    First line consists of the first number `x` (0 <= x < 1e9).
+    Second line consists of the second number `y` (0 <= x < 1.9).
+
+Output Specification:
+    The quotient.
