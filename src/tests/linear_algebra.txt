@@ -1,0 +1,13 @@
+Problem: linear_algebra
+
+Description:
+    Given a systems of equations with `N` unknowns, solve it.
+
+Input Specification:
+    The first line consists of a single integer `N` (1 <= N <= 10).
+    The second line consists of a N^2 numbers, the coefficients of the linear
+    equations.
+    The third line consists of N numbers, the answers to the linear equations.
+
+Output Specification:
+    The output will be `N` lines, with the value of the nth unknown on line n.
