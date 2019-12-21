@@ -8,15 +8,14 @@ import exercise
 
 EXERCISES_LOCATION = "tests/"
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Test your programs.")
     parser.add_argument(
-        "exercise_name", action="store",  nargs="?", type=str,
+        "exercise_name", action="store", nargs="?", type=str,
         help="the name of the exercise to test your program for.")
     parser.add_argument(
-        "program_path", action="store",  nargs="?", type=str,
+        "program_path", action="store", nargs="?", type=str,
         help="the path to the program to test.")
     parser.add_argument(
         "-l", "--list_exercises", action="store_true",
