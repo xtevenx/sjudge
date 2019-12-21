@@ -29,3 +29,12 @@ def get_exercises_list(exercises_directory: str) -> typing.List[str]:
         failed_lessons.append(exercise_name)
 
     return sorted(found_lessons)
+
+
+def get_exercise_description(exercises_directory: str, exercise_name: str) -> str:
+    file_path: str = os.path.join(exercises_directory, f"{exercise_name}.txt")
+    file_handle = open(file_path, "r")
+    description: str = file_handle.read()
+    file_handle.close()
+
+    return description

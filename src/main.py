@@ -21,6 +21,9 @@ if __name__ == "__main__":
         "-l", "--list_exercises", action="store_true",
         help="display a list of all the exercise names.",
         dest="list_exercises")
+    parser.add_argument(
+        "-s", "--see_description", action="store_true",
+        help="display the description for the given exercise.")
     arguments = parser.parse_args()
 
     if arguments.list_exercises:
@@ -29,6 +32,20 @@ if __name__ == "__main__":
 
         print(f"Found {len(lessons_list)} lessons:")
         print("\n".join(lessons_list))
+        sys.exit(0)
+
+    if arguments.see_description:
+        if arguments.exercise_name is None:
+            print("error: no exercise name specified")
+        else:
+            try:
+                print(exercise.get_exercise_description(
+                    EXERCISES_LOCATION,
+                    arguments.exercise_name
+                ))
+            except FileNotFoundError:
+                print(f"error: exercise `{arguments.exercise_name}` does not exist.")
+
         sys.exit(0)
 
     if arguments.exercise_name is None or arguments.program_path is None:
