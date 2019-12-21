@@ -4,6 +4,7 @@ import os
 import sys
 
 import judge
+import exercise
 
 EXERCISES_LOCATION = "tests/"
 
@@ -17,7 +18,19 @@ if __name__ == "__main__":
     parser.add_argument(
         "program_path", action="store",  nargs="?", type=str,
         help="the path to the program to test.")
+    parser.add_argument(
+        "-l", "--list_exercises", action="store_true",
+        help="display a list of all the exercise names.",
+        dest="list_exercises")
     arguments = parser.parse_args()
+
+    if arguments.list_exercises:
+        lessons_list = exercise.get_exercises_list(EXERCISES_LOCATION)
+        lessons_list = [f"  - {lesson_name}" for lesson_name in lessons_list]
+
+        print(f"Found {len(lessons_list)} lessons:")
+        print("\n".join(lessons_list))
+        sys.exit(0)
 
     if arguments.exercise_name is None or arguments.program_path is None:
         parser.print_help()
