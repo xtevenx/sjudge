@@ -3,8 +3,9 @@ import json
 import os
 import sys
 
-import judge
+import command
 import exercise
+import judge
 
 EXERCISES_LOCATION = "tests/"
 
@@ -63,6 +64,6 @@ if __name__ == "__main__":
         sys.exit(0)
 
     judge.judge_file(
-        arguments.program_path,
+        command.get_run_command(arguments.program_path),
         json.load(open(exercise_test_path, "r"))
     )
