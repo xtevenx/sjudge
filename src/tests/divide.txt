@@ -6,7 +6,7 @@ Description:
 
 Input Specification:
     First line consists of the first number `x` (0 <= x < 1e9).
-    Second line consists of the second number `y` (0 <= x < 1.9).
+    Second line consists of the second number `y` (0 <= x < 1e9).
 
 Output Specification:
     The quotient.
