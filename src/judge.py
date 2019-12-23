@@ -50,6 +50,7 @@ class JudgeResult:
         self.passed_testcases: int = 0
         self.total_testcases: int = 0
         self.maximum_time: float = 0.0
+        self.verdict: str = ANSWER_CORRECT
 
     def __add__(self, other: TestcaseResult) -> "JudgeResult":
         self.add_result(other)
@@ -67,6 +68,9 @@ class JudgeResult:
         self.passed_testcases += tc.passed
         self.total_testcases += 1
         self.maximum_time = max(self.maximum_time, tc.time_for_test)
+
+        if self.verdict == ANSWER_CORRECT and tc.verdict != ANSWER_CORRECT:
+            self.verdict = tc.verdict
 
 
 def judge_file(file_command: str, testcases: TESTCASE_TYPE,
@@ -132,10 +136,15 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE,
                     f"  - {s}" for s in this_result.received_output
                 ))
 
-    _display("Final score: {}/{}  [{} ms]".format(
+    details: str = (
+        f"{result_tracker.maximum_time:.0f} ms"
+        if result_tracker.verdict == ANSWER_CORRECT else
+        result_tracker.verdict
+    )
+    _display("Final score: {}/{}  [{}]".format(
         result_tracker.passed_testcases,
         result_tracker.total_testcases,
-        round(result_tracker.maximum_time)
+        details
     ))
     return result_tracker
 
