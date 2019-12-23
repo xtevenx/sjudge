@@ -1,9 +1,9 @@
 import json
 import random
 
-TESTCASES_PER_N: int = 10
+TESTCASES_PER_N: int = 5
 
-N_RANGE: iter = range(1, 11)
+N_RANGE: iter = range(1, 13)
 X_RANGE: iter = range(-(1 << 7), 1 << 7)
 
 if __name__ == "__main__":

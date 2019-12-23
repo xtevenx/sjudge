@@ -2,16 +2,13 @@
  * Program that solves a small linear equation with Cramer's Rule.
  */
 
-#include <array>
 #include <cmath>
 #include <iostream>
 #include <map>
-
-
-#define MAX_N 10
+#include <vector>
 
 typedef long double fat_boi;
-typedef std::array<std::array<fat_boi, MAX_N>, MAX_N> matrix;
+typedef std::vector<std::vector<fat_boi> > matrix;
 
 std::map<matrix, fat_boi> cache;
 
@@ -28,7 +25,7 @@ matrix replace_column(
         matrix input_matrix,
         const size_t &size,
         const size_t &replace_column,
-        const std::array<fat_boi, MAX_N> &replace_values);
+        const std::vector<fat_boi> &replace_values);
 
 matrix shrink_matrix(
         const matrix &input_matrix,
@@ -45,20 +42,20 @@ int main() {
     size_t N;
     std::cin >> N;
 
-    matrix input_matrix;
+    matrix input_matrix(N, std::vector<fat_boi>(N, 0));
     for (size_t row_i = 0; row_i < N; row_i++) {
         for (size_t col_i = 0; col_i < N; col_i++) {
             std::cin >> input_matrix[row_i][col_i];
         }
     }
 
-    std::array<fat_boi, MAX_N> y_matrix{};
+    std::vector<fat_boi> y_matrix(N, 0);
     for (size_t i = 0; i < N; i++) {
         std::cin >> y_matrix[i];
     }
 
     fat_boi original_determinant = get_determinant(input_matrix, N);
-    std::array<fat_boi, MAX_N> solved_matrix{};
+    std::vector<fat_boi> solved_matrix(N, 0);
     for (size_t i = 0; i < N; i++) {
         solved_matrix[i] = get_determinant(replace_column(input_matrix, N, i, y_matrix), N) / original_determinant;
         std::cout << (short) std::round(solved_matrix[i]) << std::endl;
@@ -116,7 +113,8 @@ matrix replace_column(
         matrix input_matrix,
         const size_t &size,
         const size_t &replace_column,
-        const std::array<fat_boi, MAX_N> &replace_values) {
+        const std::vector<fat_boi> &replace_values) {
+
     for (size_t i = 0; i < size; i++) {
         input_matrix[i][replace_column] = replace_values[i];
     }
@@ -130,7 +128,8 @@ matrix shrink_matrix(
         const size_t &size,
         const size_t &remove_row,
         const size_t &remove_column) {
-    matrix return_matrix;
+
+    matrix return_matrix(size - 1, std::vector<fat_boi>(size - 1, 0));
 
     size_t row_marker = 0, column_marker;
     for (size_t row_i = 0; row_i < size; row_i++) {
