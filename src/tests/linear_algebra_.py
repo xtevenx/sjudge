@@ -4,7 +4,7 @@ import random
 TESTCASES_PER_N: int = 10
 
 N_RANGE: iter = range(1, 11)
-X_RANGE: iter = range(-(1 << 8), 1 << 8)
+X_RANGE: iter = range(-(1 << 7), 1 << 7)
 
 if __name__ == "__main__":
     tests = []
@@ -12,8 +12,11 @@ if __name__ == "__main__":
     for N in N_RANGE:
         for _ in range(TESTCASES_PER_N):
             solutions = random.sample(X_RANGE, N)
-
             coefficients = [random.sample(X_RANGE, N) for _ in range(N)]
+
+            if 0 not in solutions and random.random() < (1 / TESTCASES_PER_N):
+                solutions[random.randrange(N)] = 0
+
             answers = [0 for _ in range(N)]
             for eq_i, eq_c in enumerate(coefficients):
                 for c_i, c in enumerate(eq_c):

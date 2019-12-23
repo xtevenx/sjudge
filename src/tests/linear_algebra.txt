@@ -12,7 +12,8 @@ Input Specification:
         C_1_a C_1_b C_1_c C_1_d ...
         ...
 
-    where `C_n_k` is the coefficient of the `k`th unknown in the `n`th equation.
+    where `C_n_k` is the coefficient of the `k`th unknown in the `n`th
+    equation. (-128 <= `C_n_k` < 128)
 
     The last line consists of `N` numbers, the answers (right side) to the
     linear equations in the order that their coefficients were given.
