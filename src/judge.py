@@ -4,9 +4,12 @@ import sys
 import time
 import typing
 
-TEST_IO_TYPE: typing.Type = typing.Iterable[str]
+from judges import float_judge
+from judges import identical_judge
 
-TESTCASE_TYPE: typing.Type = typing.Iterable[
+TEST_IO_TYPE: typing.Type = typing.List[str]
+
+TESTCASE_TYPE: typing.Type = typing.List[
     typing.Tuple[TEST_IO_TYPE, TEST_IO_TYPE]
 ]
 
@@ -15,12 +18,24 @@ RUNTIME_ERROR = "Runtime Error"
 TIME_LIMIT_EXCEEDED = "Time Limit Exceeded"
 WRONG_ANSWER = "Wrong Answer"
 
+JUDGE_TYPE: typing.Type = typing.Callable[
+    [typing.List[str], typing.List[str]], bool
+]
+
+ANY_JUDGE: typing.Type = typing.Union[str, JUDGE_TYPE]
+
+JUDGES: typing.Dict[str, JUDGE_TYPE] = {
+    "float": float_judge.float_judge,
+    "identical": identical_judge.identical_judge
+}
+
 
 class TestcaseResult:
     def __init__(self, given_input: TEST_IO_TYPE, given_output: TEST_IO_TYPE,
                  received_output: TEST_IO_TYPE, error_message: TEST_IO_TYPE,
                  exitcode: int = False, time_for_test: float = 0,
-                 time_limit_exceeded: bool = False) -> None:
+                 time_limit_exceeded: bool = False,
+                 judge_function: ANY_JUDGE = "identical"):
         self.given_input: TEST_IO_TYPE = given_input
         self.given_output: TEST_IO_TYPE = given_output
         self.received_output: TEST_IO_TYPE = received_output
@@ -28,6 +43,10 @@ class TestcaseResult:
         self.exitcode: int = exitcode
         self.time_for_test: float = time_for_test
         self.time_limit_exceeded: bool = time_limit_exceeded
+
+        if type(judge_function) == str:
+            judge_function = JUDGES[judge_function]
+        self.judge_function: JUDGE_TYPE = judge_function
 
         self.verdict: str = self._get_verdict()
         self.passed: bool = self.verdict == ANSWER_CORRECT
@@ -37,10 +56,12 @@ class TestcaseResult:
             return TIME_LIMIT_EXCEEDED
         elif self.exitcode:
             return RUNTIME_ERROR
-        elif self.received_output != self.given_output:
-            return WRONG_ANSWER
         else:
-            return ANSWER_CORRECT
+            judge_result: bool = self.judge_function(
+                self.received_output, self.given_output
+            )
+
+            return ANSWER_CORRECT if judge_result else WRONG_ANSWER
 
 
 class JudgeResult:
