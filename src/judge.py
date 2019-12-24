@@ -6,6 +6,7 @@ import typing
 
 from judges import float_judge
 from judges import identical_judge
+from judges import default_judge
 
 TEST_IO_TYPE: typing.Type = typing.List[str]
 
@@ -26,7 +27,8 @@ ANY_JUDGE: typing.Type = typing.Union[str, JUDGE_TYPE]
 
 JUDGES: typing.Dict[str, JUDGE_TYPE] = {
     "float": float_judge.float_judge,
-    "identical": identical_judge.identical_judge
+    "identical": identical_judge.identical_judge,
+    "default": default_judge.default_judge
 }
 
 
@@ -35,7 +37,7 @@ class TestcaseResult:
                  received_output: TEST_IO_TYPE, error_message: TEST_IO_TYPE,
                  exitcode: int = False, time_for_test: float = 0,
                  time_limit_exceeded: bool = False,
-                 judge_function: ANY_JUDGE = "identical"):
+                 judge_function: ANY_JUDGE = "default"):
         self.given_input: TEST_IO_TYPE = given_input
         self.given_output: TEST_IO_TYPE = given_output
         self.received_output: TEST_IO_TYPE = received_output
