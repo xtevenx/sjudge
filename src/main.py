@@ -7,7 +7,7 @@ import command
 import exercise
 import judge
 
-EXERCISES_LOCATION = "tests/"
+EXERCISES_LOCATION = "exercises/"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
