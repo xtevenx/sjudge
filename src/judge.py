@@ -7,6 +7,7 @@ import typing
 from judges import float_judge
 from judges import identical_judge
 from judges import default_judge
+import truncate
 
 TEST_IO_TYPE: typing.Type = typing.List[str]
 
@@ -30,6 +31,10 @@ JUDGES: typing.Dict[str, JUDGE_TYPE] = {
     "identical": identical_judge.identical_judge,
     "default": default_judge.default_judge
 }
+
+TRUNCATOR_TYPE = typing.Callable[[typing.List[str]], typing.List[str]]
+
+DEFAULT_TRUNCATOR: TRUNCATOR_TYPE = lambda s: truncate.truncate(s, 80, 3)
 
 
 class TestcaseResult:
@@ -97,7 +102,8 @@ class JudgeResult:
 
 
 def judge_file(file_command: str, testcases: TESTCASE_TYPE,
-               time_limit: float = 1.0) -> JudgeResult:
+               time_limit: float = 1.0,
+               truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR) -> JudgeResult:
     result_tracker = JudgeResult()
 
     for test_number, (test_input, test_output) in enumerate(testcases):
@@ -142,7 +148,7 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE,
 
             if this_result.verdict == RUNTIME_ERROR:
                 _display("\n".join(
-                    f"  - {s}" for s in this_result.error_message
+                    f"  - {s}" for s in truncator(this_result.error_message)
                 ))
                 _display("  - Process finished with exit code {}".format(
                     this_result.exitcode
@@ -151,12 +157,12 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE,
             elif this_result.verdict == WRONG_ANSWER:
                 _display("  - Expected output:")
                 _display("\n".join(
-                    f"  - {s}" for s in this_result.given_output
+                    f"  - {s}" for s in truncator(this_result.given_output)
                 ))
 
                 _display("  - Received output:")
                 _display("\n".join(
-                    f"  - {s}" for s in this_result.received_output
+                    f"  - {s}" for s in truncator(this_result.received_output)
                 ))
 
     details: str = (
