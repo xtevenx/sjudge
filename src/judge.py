@@ -105,6 +105,11 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE,
                time_limit: float = 1.0, judge: JUDGE_TYPE = "default",
                truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR,
                name: str = "???") -> JudgeResult:
+    print(f"Running tests for exercise: {name}")
+    print(f"  - Time limit: {1000 * time_limit:.0f} ms")
+    print(f"  - Judge: {judge}")
+    print()
+
     result_tracker = JudgeResult()
 
     for test_number, (test_input, test_output) in enumerate(testcases):
