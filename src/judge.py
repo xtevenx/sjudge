@@ -102,7 +102,7 @@ class JudgeResult:
 
 
 def judge_file(file_command: str, testcases: TESTCASE_TYPE,
-               time_limit: float = 1.0,
+               time_limit: float = 1.0, judge: JUDGE_TYPE = "default",
                truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR) -> JudgeResult:
     result_tracker = JudgeResult()
 
@@ -125,7 +125,8 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE,
 
             result_tracker += TestcaseResult(
                 test_input, test_output, process_output, process_errors,
-                process_exitcode, time_for_test=1000 * (time.time() - start_time)
+                process_exitcode, time_for_test=1000 * (time.time() - start_time),
+                judge_function=judge
             )
 
         except subprocess.TimeoutExpired as ex:
