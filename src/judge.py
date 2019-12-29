@@ -34,7 +34,7 @@ JUDGES: typing.Dict[str, JUDGE_TYPE] = {
 
 TRUNCATOR_TYPE = typing.Callable[[typing.List[str]], typing.List[str]]
 
-DEFAULT_TRUNCATOR: TRUNCATOR_TYPE = lambda s: truncate.truncate(s, 80, 3)
+DEFAULT_TRUNCATOR: TRUNCATOR_TYPE = lambda s: truncate.truncate(s, 120, 3)
 
 
 class TestcaseResult:
