@@ -103,7 +103,8 @@ class JudgeResult:
 
 def judge_file(file_command: str, testcases: TESTCASE_TYPE,
                time_limit: float = 1.0, judge: JUDGE_TYPE = "default",
-               truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR) -> JudgeResult:
+               truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR,
+               name: str = "???") -> JudgeResult:
     result_tracker = JudgeResult()
 
     for test_number, (test_input, test_output) in enumerate(testcases):

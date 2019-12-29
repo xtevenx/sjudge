@@ -5,8 +5,8 @@ Description:
     `y`. Any decimals are to be rounded down to the nearest integer.
 
 Input Specification:
-    First line consists of a single number `x` (0 <= x < 1e9).
-    Second line consists of a single number `y` (1 <= y < 1e9).
+    First line consists of a single number `x` (-1e9 <= x < 1e9).
+    Second line consists of a single number `y` (-1e9 <= y < 1e9, y != 0).
 
 Output Specification:
     The output consists of a single integer, the quotient.

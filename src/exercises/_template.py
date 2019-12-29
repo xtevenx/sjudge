@@ -1,5 +1,4 @@
 import json
-import random
 import typing
 
 # the "input/output format" for the testing data is a list of strings. Each
@@ -31,21 +30,15 @@ N_RANGE: iter = range(1, int(10 ** 5))
 
 # `X` is each input in the test case.
 X_RANGE: iter = range(-(10 ** 9), 10 ** 9)
-Y_RANGE: iter = range(-(10 ** 9), 10 ** 9)
-Y_SMALL_RANGE: iter = range(-(10 ** 3), 10 ** 3)
 
 if __name__ == "__main__":
     tests: typing.List[TEST_TYPE] = []
 
     for _ in range(TESTCASES):
-        x = random.choice(X_RANGE)
-
-        y_range = Y_RANGE if random.random() < 0.2 else Y_SMALL_RANGE
-        y = random.choice(Y_RANGE)
-        while y == 0:
-            y = random.choice(Y_RANGE)
-
-        tests.append(([str(x), str(y)], [str(x // y)]))
+        # generate the exercise testcases here and store them in `tests`.
+        # `tests` is a list of tests which represents the test cases to test the
+        # tested program on.
+        pass
 
     EXERCISE_SPECIFICATIONS["testcases"] = tests
 
