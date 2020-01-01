@@ -1,13 +1,15 @@
-LANGUAGE_EXTENSIONS = {
+import typing
+
+LANGUAGE_EXTENSIONS: typing.Dict[frozenset, str] = {
     frozenset({"py", "pyc"}): "python3 {}",
     frozenset({"jar"}): "java -jar {}",
 }
 
-BASE_COMMAND = "./{}"
+BASE_COMMAND: str = "./{}"
 
 
 def get_run_command(filename: str) -> str:
-    extension: str = filename.split(".")[-1]
+    extension = filename.split(".")[-1]
     for extensions, command in LANGUAGE_EXTENSIONS.items():
         if extension in extensions:
             return command.format(filename)

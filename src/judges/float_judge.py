@@ -12,7 +12,7 @@ def float_judge(program_output: typing.List[str], expected_output: typing.List[s
 
     try:
         for line_i, program_line in enumerate(program_output):
-            expected: typing.List[str] = expected_output[line_i].split()
+            expected = expected_output[line_i].split()
             for i, number in enumerate(program_line.split()):
                 number = round(float(number), precision)
                 if round(float(expected[i]), precision) != number:

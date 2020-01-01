@@ -13,12 +13,12 @@ TEST_IO_TYPE: typing.Type = typing.List[str]
 TESTCASE_TYPE: typing.Type = typing.List[typing.Tuple[TEST_IO_TYPE, TEST_IO_TYPE]]
 JUDGE_TYPE: typing.Type = typing.Callable[[typing.List[str], typing.List[str]], bool]
 ANY_JUDGE: typing.Type = typing.Union[str, JUDGE_TYPE]
-TRUNCATOR_TYPE = typing.Callable[[typing.List[str]], typing.List[str]]
+TRUNCATOR_TYPE: typing.Type = typing.Callable[[typing.List[str]], typing.List[str]]
 
-ANSWER_CORRECT = "Answer Correct"
-RUNTIME_ERROR = "Runtime Error"
-TIME_LIMIT_EXCEEDED = "Time Limit Exceeded"
-WRONG_ANSWER = "Wrong Answer"
+ANSWER_CORRECT: str = "Answer Correct"
+RUNTIME_ERROR: str = "Runtime Error"
+TIME_LIMIT_EXCEEDED: str = "Time Limit Exceeded"
+WRONG_ANSWER: str = "Wrong Answer"
 
 JUDGES: typing.Dict[str, JUDGE_TYPE] = {
     "float": float_judge.float_judge,
@@ -56,7 +56,7 @@ class TestcaseResult:
         elif self.exitcode:
             return RUNTIME_ERROR
         else:
-            judge_result: bool = self.judge_function(self.received_output, self.given_output)
+            judge_result = self.judge_function(self.received_output, self.given_output)
             return ANSWER_CORRECT if judge_result else WRONG_ANSWER
 
 
@@ -149,7 +149,7 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 
                 _display("  - Received output:")
                 _display("\n".join(f"  - {s}" for s in truncator(this_result.received_output)))
 
-    details: str = (
+    details = (
         f"{result_tracker.maximum_time:.0f} ms"
         if result_tracker.verdict == ANSWER_CORRECT else
         result_tracker.verdict
