@@ -14,8 +14,7 @@ def get_exercises_list(exercises_directory: str) -> typing.List[str]:
     all_files: typing.Iterable[str] = os.listdir(exercises_directory)
     all_files = (
         f.split(".")[0] for f in all_files
-        if (f.split(".")[0] not in found_lessons
-            and f.split(".")[0] not in failed_lessons)
+        if f.split(".")[0] not in found_lessons and f.split(".")[0] not in failed_lessons
     )
 
     for exercise_name in all_files:

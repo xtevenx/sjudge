@@ -1,8 +1,7 @@
 import typing
 
 
-def float_judge(program_output: typing.List[str],
-                expected_output: typing.List[str],
+def float_judge(program_output: typing.List[str], expected_output: typing.List[str],
                 precision: int = 8) -> bool:
     if len(program_output) != len(expected_output):
         return False

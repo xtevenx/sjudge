@@ -1,7 +1,3 @@
-/*
- * Program that solves a small linear equation with Cramer's Rule.
- */
-
 #include <cmath>
 #include <iostream>
 #include <map>

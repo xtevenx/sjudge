@@ -1,18 +1,18 @@
 import json
 import typing
 
-# the "input/output format" for the testing data is a list of strings. Each
-# string in the list represents a line of characters that is to be passed to
-# the tested program.
+# The "input/output format" for the testing data is a list of strings.
+# Each string in the list represents a line of characters that is to be
+# passed to the tested program.
 IO_TYPE: typing.Type = typing.List[str]
 
-# the format of a test is a tuple of two "input/output format" lists. the
-# first represents the input that is given to the tested program and the
-# second represents the expected output from the program.
+# The format of a test is a tuple of two "input/output format" lists.
+# The first represents the input that is given to the tested program
+# and the second represents the expected output from the program.
 TEST_TYPE: typing.Type = typing.Tuple[IO_TYPE, IO_TYPE]
 
-# set the name of the exercise for which to generate testing data (this file
-# should be called f"{EXERCISE_NAME}_.py").
+# Set the name of the exercise for which to generate testing data (this
+# file should be called f"{EXERCISE_NAME}_.py").
 EXERCISE_NAME: str = __file__[:-4]
 
 # define all required exercise specifications.
@@ -35,9 +35,9 @@ if __name__ == "__main__":
     tests: typing.List[TEST_TYPE] = []
 
     for _ in range(TESTCASES):
-        # generate the exercise testcases here and store them in `tests`.
-        # `tests` is a list of tests which represents the test cases to test the
-        # tested program on.
+        # Generate the exercise testcases here and store them in
+        # `tests`. `tests` is a list of tests which represents the test
+        # cases to test the tested program on.
         pass
 
     EXERCISE_SPECIFICATIONS["testcases"] = tests

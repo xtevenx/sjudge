@@ -10,8 +10,7 @@ import judge
 EXERCISES_LOCATION = "exercises/"
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Test your programs.")
+    parser = argparse.ArgumentParser(description="Test your programs.")
     parser.add_argument(
         "exercise_name", action="store", nargs="?", type=str,
         help="the name of the exercise to test your program for.")
@@ -20,8 +19,7 @@ if __name__ == "__main__":
         help="the path to the program to test.")
     parser.add_argument(
         "-l", "--list_exercises", action="store_true",
-        help="display a list of all the exercise names.",
-        dest="list_exercises")
+        help="display a list of all the exercise names.", dest="list_exercises")
     parser.add_argument(
         "-s", "--see_description", action="store_true",
         help="display the description for the given exercise.")
@@ -41,8 +39,7 @@ if __name__ == "__main__":
         else:
             try:
                 print(exercise.get_exercise_description(
-                    EXERCISES_LOCATION,
-                    arguments.exercise_name
+                    EXERCISES_LOCATION, arguments.exercise_name
                 ))
             except FileNotFoundError:
                 print(f"error: exercise `{arguments.exercise_name}` does not exist.")
@@ -53,8 +50,7 @@ if __name__ == "__main__":
         parser.print_help()
         sys.exit(0)
 
-    exercise_test_path = os.path.join(
-        EXERCISES_LOCATION, f"{arguments.exercise_name}.json")
+    exercise_test_path = os.path.join(EXERCISES_LOCATION, f"{arguments.exercise_name}.json")
     if not os.path.exists(exercise_test_path):
         print(f"error: exercise `{arguments.exercise_name}` does not exist.")
         sys.exit(0)
