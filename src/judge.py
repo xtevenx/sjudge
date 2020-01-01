@@ -26,7 +26,7 @@ JUDGES: typing.Dict[str, JUDGE_TYPE] = {
     "default": default_judge.default_judge
 }
 
-DEFAULT_TRUNCATOR: TRUNCATOR_TYPE = lambda s: truncate.truncate(s, 120, 3)
+DEFAULT_TRUNCATOR: TRUNCATOR_TYPE = lambda s: truncate.truncate(s, 200, 4)
 
 
 class TestcaseResult:
