@@ -94,8 +94,8 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 
                judge: JUDGE_TYPE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR,
                name: str = "???") -> JudgeResult:
     print(f"Running tests for exercise: {name}")
-    print(f"  - Time limit: {1000 * time_limit:.0f} ms")
-    print(f"  - Judge: {judge}")
+    print(f"  ⮡ Time limit: {1000 * time_limit:.0f} ms")
+    print(f"  ⮡ Judge: {judge}")
     print()
 
     result_tracker = JudgeResult()
@@ -139,20 +139,21 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 
             ))
 
             if this_result.verdict == RUNTIME_ERROR:
-                _display("\n".join(f"  - {s}" for s in truncator(this_result.error_message)))
-                _display("  - Process finished with exit code {}".format(this_result.exitcode))
+                _display("  Error Message:")
+                _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.error_message)))
+                _display("  Exit code:")
+                _display("  ⮡ Process finished with exit code {}".format(this_result.exitcode))
 
             elif this_result.verdict == WRONG_ANSWER:
-                _display("  - Expected output:")
-                _display("\n".join(f"  - {s}" for s in truncator(this_result.given_output)))
+                _display("  Expected output:")
+                _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.given_output)))
 
-                _display("  - Received output:")
-                _display("\n".join(f"  - {s}" for s in truncator(this_result.received_output)))
+                _display("  Received output:")
+                _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.received_output)))
 
     details = (
         f"{result_tracker.maximum_time:.0f} ms"
-        if result_tracker.verdict == ANSWER_CORRECT else
-        result_tracker.verdict
+        if result_tracker.verdict == ANSWER_CORRECT else result_tracker.verdict
     )
     _display("Final score: {}/{}  [{}]".format(
         result_tracker.passed_testcases, result_tracker.total_testcases, details
