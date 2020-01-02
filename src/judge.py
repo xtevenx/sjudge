@@ -1,12 +1,11 @@
 import shlex
-import subprocess
 import sys
-import time
 import typing
 
 from judges import float_judge
 from judges import identical_judge
 from judges import default_judge
+import test
 import truncate
 
 TEST_IO_TYPE: typing.Type = typing.List[str]
@@ -34,7 +33,7 @@ class TestcaseResult:
                  received_output: TEST_IO_TYPE, error_message: TEST_IO_TYPE,
                  exitcode: int = False, time_for_test: float = 0,
                  time_limit_exceeded: bool = False,
-                 judge_function: ANY_JUDGE = "default"):
+                 maximum_memory: int = 0, judge_function: ANY_JUDGE = "default"):
         self.given_input: TEST_IO_TYPE = given_input
         self.given_output: TEST_IO_TYPE = given_output
         self.received_output: TEST_IO_TYPE = received_output
@@ -42,6 +41,7 @@ class TestcaseResult:
         self.exitcode: int = exitcode
         self.time_for_test: float = time_for_test
         self.time_limit_exceeded: bool = time_limit_exceeded
+        self.maximum_memory: int = maximum_memory
 
         if type(judge_function) == str:
             judge_function = JUDGES[judge_function]
@@ -67,6 +67,7 @@ class JudgeResult:
         self.passed_testcases: int = 0
         self.total_testcases: int = 0
         self.maximum_time: float = 0.0
+        self.maximum_memory: int = 0
         self.verdict: str = ANSWER_CORRECT
 
     def __add__(self, other: TestcaseResult) -> "JudgeResult":
@@ -85,6 +86,7 @@ class JudgeResult:
         self.passed_testcases += tc.passed
         self.total_testcases += 1
         self.maximum_time = max(self.maximum_time, tc.time_for_test)
+        self.maximum_memory = max(self.maximum_memory, tc.maximum_memory)
 
         if self.verdict == ANSWER_CORRECT and tc.verdict != ANSWER_CORRECT:
             self.verdict = tc.verdict
@@ -101,58 +103,50 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 
     result_tracker = JudgeResult()
 
     for test_number, (test_input, test_output) in enumerate(testcases):
-        start_time = time.time()
+        process_return = test.run(
+            shlex.split(file_command),
+            input=_encode_io(test_input),
+            timeout=time_limit
+        )
 
-        try:
-            process_return = subprocess.run(
-                shlex.split(file_command),
-                input=_encode_io(test_input),
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                timeout=time_limit,
-                universal_newlines=True
-            )
+        process_output = _decode_io(process_return.stdout)
+        process_errors = _decode_io(process_return.stderr)
+        process_exitcode = process_return.returncode
 
-            process_output = _decode_io(process_return.stdout)
-            process_errors = _decode_io(process_return.stderr)
-            process_exitcode = process_return.returncode
+        time_taken = 1000 * min(time_limit, process_return.time_taken)
+        result_tracker += TestcaseResult(
+            test_input, test_output, process_output, process_errors, process_exitcode,
+            time_for_test=time_taken,
+            time_limit_exceeded=process_return.timed_out,
+            maximum_memory=process_return.max_memory,
+            judge_function=judge
+        )
 
-            result_tracker += TestcaseResult(
-                test_input, test_output, process_output, process_errors, process_exitcode,
-                time_for_test=1000 * (time.time() - start_time), judge_function=judge
-            )
+        this_result = result_tracker[-1]
+        _display("Case #{} → {}  [{:.0f} ms, {:.2f} MiB]".format(
+            test_number + 1,
+            this_result.verdict,
+            this_result.time_for_test,
+            this_result.maximum_memory / 1024 / 1024
+        ))
 
-        except subprocess.TimeoutExpired as ex:
-            result_tracker += TestcaseResult(
-                test_input, test_output, [""], [""], 1,
-                time_for_test=1000 * ex.timeout,
-                time_limit_exceeded=True
-            )
+        if this_result.verdict == RUNTIME_ERROR:
+            _display("  Error Message:")
+            _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.error_message)))
+            _display("  Exit code:")
+            _display("  ⮡ Process finished with exit code {}".format(this_result.exitcode))
 
-        finally:
-            elapsed_time = 1000 * (time.time() - start_time)
-            elapsed_time = min(1000 * time_limit, elapsed_time)
-
-            this_result = result_tracker[-1]
-            _display("Case #{} → {}  [{} ms]".format(
-                test_number + 1, this_result.verdict, round(elapsed_time)
-            ))
-
-            if this_result.verdict == RUNTIME_ERROR:
-                _display("  Error Message:")
-                _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.error_message)))
-                _display("  Exit code:")
-                _display("  ⮡ Process finished with exit code {}".format(this_result.exitcode))
-
-            elif this_result.verdict == WRONG_ANSWER:
-                _display("  Expected output:")
-                _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.given_output)))
-
-                _display("  Received output:")
-                _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.received_output)))
+        elif this_result.verdict == WRONG_ANSWER:
+            _display("  Expected output:")
+            _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.given_output)))
+            _display("  Received output:")
+            _display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.received_output)))
 
     details = (
-        f"{result_tracker.maximum_time:.0f} ms"
+        ("{:.0f} ms, {:.2f} MiB".format(
+            result_tracker.maximum_time,
+            result_tracker.maximum_memory / 1024 / 1024
+        ))
         if result_tracker.verdict == ANSWER_CORRECT else result_tracker.verdict
     )
     _display("Final score: {}/{}  [{}]".format(
