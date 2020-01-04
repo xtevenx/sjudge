@@ -1,10 +1,18 @@
+import json
 import os
 import typing
 
-REQUIRED_COMPONENTS: typing.List = [
-    "json",  # problems & solutions
+SPEC_TYPE: typing.Type = typing.Dict[typing.AnyStr, typing.Any]
+
+REQUIRED_COMPONENTS: typing.List[str] = [
+    "json",  # problem specifications
     "txt",  # problem description
 ]
+
+SPEC_FORMATTING: typing.Dict[str, str] = {
+    "name": "{key}: {value}\n",
+    "time_limit": "{key}: {value} s"
+}
 
 
 def get_exercises_list(exercises_directory: str) -> typing.List[str]:
@@ -30,9 +38,27 @@ def get_exercises_list(exercises_directory: str) -> typing.List[str]:
 
 
 def get_exercise_description(exercises_directory: str, exercise_name: str) -> str:
+    description = ""
+
+    spec_path = os.path.join(exercises_directory, f"{exercise_name}.json")
+    specs: SPEC_TYPE = json.load(open(spec_path, "r"))
+    for key, value in specs.items():
+        if key == "testcases":
+            continue
+        formatted_key = key.replace("_", " ").capitalize()
+
+        try:
+            description += SPEC_FORMATTING[key].format(
+                key=formatted_key, value=value
+            ) + "\n"
+        except KeyError:
+            description += f"{formatted_key}: {value}\n"
+
+    description += "\n"
+
     file_path = os.path.join(exercises_directory, f"{exercise_name}.txt")
     file_handle = open(file_path, "r")
-    description = file_handle.read()
+    description += file_handle.read()
     file_handle.close()
 
     return description

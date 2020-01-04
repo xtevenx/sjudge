@@ -1,5 +1,3 @@
-Problem: divide
-
 Description:
     Given two numbers, `x` and `y`, find the quotient when `x` is divided by
     `y`. Any decimals are to be rounded down to the nearest integer.

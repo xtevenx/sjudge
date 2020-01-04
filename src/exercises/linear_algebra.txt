@@ -1,5 +1,3 @@
-Problem: linear_algebra
-
 Description:
     Given a system of equations with `N` unknowns, solve it.
 
