@@ -10,7 +10,7 @@ REQUIRED_COMPONENTS: typing.List[str] = [
 ]
 
 SPEC_FORMATTING: typing.Dict[str, str] = {
-    "name": "{key}: {value}\n",
+    "problem": "{key}: {value}\n",
     "time_limit": "{key}: {value} s"
 }
 

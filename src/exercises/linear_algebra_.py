@@ -18,7 +18,7 @@ EXERCISE_NAME: str = __file__[:-4]
 
 # define all required exercise specifications.
 EXERCISE_SPECIFICATIONS: typing.Dict[str, typing.Any] = {
-    "name": EXERCISE_NAME,
+    "problem": EXERCISE_NAME,
     "judge": "default",
     "time_limit": 1.0,
 }
