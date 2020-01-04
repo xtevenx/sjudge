@@ -10,8 +10,6 @@ import judge
 EXERCISES_LOCATION = "exercises/"
 
 if __name__ == "__main__":
-    sys.stderr = os.devnull
-
     parser = argparse.ArgumentParser(description="Test your programs.")
     parser.add_argument(
         "exercise_name", action="store", nargs="?", type=str,
