@@ -3,7 +3,7 @@
 #include <map>
 #include <vector>
 
-typedef long double fat_boi;
+typedef float fat_boi;
 typedef std::vector<std::vector<fat_boi> > matrix;
 
 std::map<matrix, fat_boi> cache;
