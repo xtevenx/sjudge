@@ -1,0 +1,17 @@
+Description:
+    Give an explanation of the problem along with all the necessary background
+    information. Err on the side of caution when assuming the users'
+    knowledge.
+
+Input Specification:
+    Specify the lines of input with the following details:
+      - the amount of inputs (conventionally `N`)
+      - the constraints (minimum and maximum; conventionally `x`)
+      - if giving a sequence of inputs, specify which element in the
+        sequence corresponds to which element of the problem (described in
+        `Description` above).
+
+Output Specification:
+    Specify the lines of output expected from the program. If expecting a
+    sequence, specify which element in the sequence corresponds to which which
+    element of the problem.
