@@ -9,7 +9,8 @@ import judge
 
 EXERCISES_LOCATION = "exercises/"
 
-if __name__ == "__main__":
+
+def main():
     parser = argparse.ArgumentParser(description="Test your programs.")
     parser.add_argument(
         "exercise_name", action="store", nargs="?", type=str,
@@ -63,3 +64,12 @@ if __name__ == "__main__":
         command.get_run_command(arguments.program_path),
         **json.load(open(exercise_test_path, "r"))
     )
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print(f"Detected `KeyboardInterrupt()`, stopping judging.")
+    except BaseException as err:
+        print(f"Detected `{err.__repr__()}`, please report this bug.")
