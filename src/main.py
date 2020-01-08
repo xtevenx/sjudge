@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import sys
+import traceback
 
 import command
 import exercise
@@ -72,4 +73,9 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print(f"Detected `KeyboardInterrupt()`, stopping judging.")
     except BaseException as err:
-        print(f"Detected `{err.__repr__()}`, please report this bug.")
+        print("<-- ERROR TRACEBACK -->")
+        traceback.print_tb(err.__traceback__)
+        print("  " + err.__repr__())
+
+        print("Error detected; if you believe this is a bug, please report it with the full\n"
+              "error message.")
