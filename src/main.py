@@ -61,11 +61,11 @@ def main():
         sys.exit(0)
 
     exercise_test_path = os.path.join(exercises_location, f"{arguments.exercise_name}.json")
-    if not os.path.exists(exercise_test_path):
+    if not os.path.isfile(exercise_test_path):
         print(f"error: exercise `{arguments.exercise_name}` does not exist.")
         sys.exit(0)
 
-    if not os.path.exists(arguments.program_path):
+    if not os.path.isfile(arguments.program_path):
         print(f"error: program `{arguments.program_path}` does not exist.")
         sys.exit(0)
 
@@ -82,6 +82,10 @@ if __name__ == "__main__":
         sys.exit(*err.args)
     except KeyboardInterrupt:
         print("Detected `KeyboardInterrupt()`, stopping judging.")
+    except AssertionError as err:
+        full_error = "\n".join(err.args)
+        print(f"Detected error: `{full_error}`; this should not be a bug (please check your "
+              f"configurations).")
     except BaseException as err:
         print("<-- ERROR TRACEBACK -->")
         traceback.print_tb(err.__traceback__)
@@ -89,3 +93,4 @@ if __name__ == "__main__":
 
         print("Error detected; if you believe this is a bug, please report it with the full\n"
               "error message.")
+        sys.exit(1)
