@@ -82,6 +82,10 @@ if __name__ == "__main__":
         sys.exit(*err.args)
     except KeyboardInterrupt:
         print("Detected `KeyboardInterrupt()`, stopping judging.")
+    except AssertionError as err:
+        full_error = "\n".join(err.args)
+        print(f"Detected error: `{full_error}`; this should not be a bug (please check your "
+              f"configurations).")
     except BaseException as err:
         print("<-- ERROR TRACEBACK -->")
         traceback.print_tb(err.__traceback__)

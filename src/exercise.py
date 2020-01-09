@@ -16,6 +16,9 @@ SPEC_FORMATTING: typing.Dict[str, str] = {
 
 
 def get_exercises_list(exercises_directory: str) -> typing.List[str]:
+    assert os.path.isdir(exercises_directory), \
+        f"The exercises location `{exercises_directory}` is not a directory."
+
     found_lessons: typing.List[str] = []
     failed_lessons: typing.List[str] = []
 
