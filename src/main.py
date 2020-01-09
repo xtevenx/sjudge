@@ -8,7 +8,7 @@ import command
 import exercise
 import judge
 
-EXERCISES_LOCATION = "exercises/"
+DEFAULT_EXERCISES = "exercises/"
 
 
 def main():
@@ -24,11 +24,19 @@ def main():
         help="display a list of all the exercise names.", dest="list_exercises")
     parser.add_argument(
         "-s", "--see_description", action="store_true",
-        help="display the description for the given exercise.")
+        help="display the description for the given exercise.", dest="see_description")
+    parser.add_argument(
+        "-e", "--exercises_location", action="store",
+        help="set the location of the exercises.", dest="exercises_location")
     arguments = parser.parse_args()
 
+    exercises_location = (
+        arguments.exercises_location if arguments.exercises_location is not None
+        else DEFAULT_EXERCISES
+    )
+
     if arguments.list_exercises:
-        lessons_list = exercise.get_exercises_list(EXERCISES_LOCATION)
+        lessons_list = exercise.get_exercises_list(exercises_location)
         lessons_list = [f"  - {lesson_name}" for lesson_name in lessons_list]
 
         print(f"Found {len(lessons_list)} lessons:")
@@ -41,7 +49,7 @@ def main():
         else:
             try:
                 print(exercise.get_exercise_description(
-                    EXERCISES_LOCATION, arguments.exercise_name
+                    exercises_location, arguments.exercise_name
                 ))
             except FileNotFoundError:
                 print(f"error: exercise `{arguments.exercise_name}` does not exist.")
@@ -52,7 +60,7 @@ def main():
         parser.print_help()
         sys.exit(0)
 
-    exercise_test_path = os.path.join(EXERCISES_LOCATION, f"{arguments.exercise_name}.json")
+    exercise_test_path = os.path.join(exercises_location, f"{arguments.exercise_name}.json")
     if not os.path.exists(exercise_test_path):
         print(f"error: exercise `{arguments.exercise_name}` does not exist.")
         sys.exit(0)
@@ -68,8 +76,6 @@ def main():
 
 
 if __name__ == "__main__":
-    raise KeyboardInterrupt
-
     try:
         main()
     except SystemExit as err:
