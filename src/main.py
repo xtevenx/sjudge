@@ -61,11 +61,11 @@ def main():
         sys.exit(0)
 
     exercise_test_path = os.path.join(exercises_location, f"{arguments.exercise_name}.json")
-    if not os.path.exists(exercise_test_path):
+    if not os.path.isfile(exercise_test_path):
         print(f"error: exercise `{arguments.exercise_name}` does not exist.")
         sys.exit(0)
 
-    if not os.path.exists(arguments.program_path):
+    if not os.path.isfile(arguments.program_path):
         print(f"error: program `{arguments.program_path}` does not exist.")
         sys.exit(0)
 
