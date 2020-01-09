@@ -17,6 +17,7 @@ TRUNCATOR_TYPE: typing.Type = typing.Callable[[typing.List[str]], typing.List[st
 ANSWER_CORRECT: str = "Answer Correct"
 RUNTIME_ERROR: str = "Runtime Error"
 TIME_LIMIT_EXCEEDED: str = "Time Limit Exceeded"
+MEM_LIMIT_EXCEEDED: str = "Memory Limit Exceeded"
 WRONG_ANSWER: str = "Wrong Answer"
 
 JUDGES: typing.Dict[str, JUDGE_TYPE] = {
@@ -33,7 +34,8 @@ class TestcaseResult:
                  received_output: TEST_IO_TYPE, error_message: TEST_IO_TYPE,
                  exitcode: int = False, time_for_test: float = 0,
                  time_limit_exceeded: bool = False,
-                 maximum_memory: int = 0, judge_function: ANY_JUDGE = "default"):
+                 maximum_memory: int = 0, mem_limit_exceeded: bool = False,
+                 judge_function: ANY_JUDGE = "default"):
         self.given_input: TEST_IO_TYPE = given_input
         self.given_output: TEST_IO_TYPE = given_output
         self.received_output: TEST_IO_TYPE = received_output
@@ -42,6 +44,7 @@ class TestcaseResult:
         self.time_for_test: float = time_for_test
         self.time_limit_exceeded: bool = time_limit_exceeded
         self.maximum_memory: int = maximum_memory
+        self.mem_limit_exceeded: bool = mem_limit_exceeded
 
         if type(judge_function) == str:
             judge_function = JUDGES[judge_function]
@@ -53,6 +56,8 @@ class TestcaseResult:
     def _get_verdict(self) -> str:
         if self.time_limit_exceeded:
             return TIME_LIMIT_EXCEEDED
+        elif self.mem_limit_exceeded:
+            return MEM_LIMIT_EXCEEDED
         elif self.exitcode:
             return RUNTIME_ERROR
         else:
@@ -93,10 +98,12 @@ class JudgeResult:
 
 
 def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 1.0,
-               judge: JUDGE_TYPE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR,
-               problem: str = "???") -> JudgeResult:
+               memory_limit: int = 256, judge: JUDGE_TYPE = "default",
+               truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR, problem: str = "???"
+               ) -> JudgeResult:
     print(f"Running tests for exercise: {problem}")
     print(f"  ⮡ Time limit: {1000 * time_limit:.0f} ms")
+    print(f"  ⮡ Memory limit: {memory_limit} MiB")
     print(f"  ⮡ Judge: {judge}")
     print()
 
@@ -106,7 +113,8 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 
         process_return = test.run(
             shlex.split(file_command),
             input=_encode_io(test_input),
-            timeout=time_limit
+            timeout=time_limit,
+            memory_limit=1024 * 1024 * memory_limit,
         )
 
         process_output = _decode_io(process_return.stdout)
@@ -119,6 +127,7 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 
             time_for_test=time_taken,
             time_limit_exceeded=process_return.timed_out,
             maximum_memory=process_return.max_memory,
+            mem_limit_exceeded=process_return.memory_exceeded,
             judge_function=judge
         )
 
