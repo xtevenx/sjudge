@@ -89,3 +89,4 @@ if __name__ == "__main__":
 
         print("Error detected; if you believe this is a bug, please report it with the full\n"
               "error message.")
+        sys.exit(1)
