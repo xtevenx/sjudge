@@ -72,8 +72,8 @@ if __name__ == "__main__":
         main()
     except SystemExit as err:
         sys.exit(*err.args)
-    except KeyboardInterrupt as err:
-        print(f"Detected `{err}`, stopping judging.")
+    except KeyboardInterrupt:
+        print("Detected `KeyboardInterrupt()`, stopping judging.")
     except BaseException as err:
         print("<-- ERROR TRACEBACK -->")
         traceback.print_tb(err.__traceback__)
