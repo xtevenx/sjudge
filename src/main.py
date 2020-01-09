@@ -68,7 +68,7 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(2)
+    raise KeyboardInterrupt
 
     try:
         main()
