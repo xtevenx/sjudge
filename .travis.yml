@@ -2,13 +2,29 @@ language: python
 
 jobs:
   include:
+    - name: "Python 3.6.10 on Bionic Linux"
+      os: linux
+      python: "3.6.10"
+    - name: "Python 3.7.6 on Bionic Linux"
+      os: linux
+      python: "3.7.6"
     - name: "Python 3.8.1 on Bionic Linux"
       os: linux
       python: "3.8.1"
-    - name: "Python 3.7.4 on macOS"
-      os: osx
-      osx_image: xcode11.2
+    - name: "Python 3.6.10 on Windows"
+      os: windows
       language: shell
+      before_install:
+        - choco install python --version 3.6.10
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python36:/c/Python36/Scripts:$PATH
+    - name: "Python 3.7.6 on Windows"
+      os: windows
+      language: shell
+      before_install:
+        - choco install python --version 3.7.6
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
     - name: "Python 3.8.1 on Windows"
       os: windows
       language: shell
