@@ -16,9 +16,9 @@ TESTS = [
     "python3 src/main.py --exercises_location src/exercises --see_description _template",
 
     "python3 src/main.py --exercises_location src/exercises divide",
-    "python3 src/main.py --exercises_location src/exercises src/exercises/divide.py",
-    "python3 src/main.py --exercises_location src/exercises divide src/exercises/divide.py",
-    "python3 src/main.py --exercises_location src/exercises divide src/exercises/",
+    "python3 src/main.py --exercises_location src/exercises src/solutions/divide.py",
+    "python3 src/main.py --exercises_location src/exercises divide src/solutions/divide.py",
+    "python3 src/main.py --exercises_location src/exercises divide src/solutions/",
     "python3 src/main.py --exercises_location src/exercises JQZ_test JQZ_test",
 ]
 
