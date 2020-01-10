@@ -22,6 +22,22 @@ Python versions:
   * Python 3.7.x
   * Python 3.8.x
 
+### When (and why) I should use `sjudge`?
+
+`sjudge` is a "programming judge", which means that it is a tool used to test programs to see if they work as expected.
+However, contrary to most other judges, `sjudge` is locally run which results in a simpler design.
+Along with it also comes with a set of advantages and disadvantages:
+
+Advantages:
+
+  * Simple design for easy configurability.
+  * No fear of students trying to undermine your machine.
+
+Disadvantages:
+
+  * Programs' performance is affected by machine usage.
+  * Smart students can technically access the test cases.
+
 ## License
 
 `sjudge` is licensed under the [GNU General Public License v3.0](https://github.com/steven-xia/sjudge/blob/readme/LICENSE).
