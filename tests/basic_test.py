@@ -27,7 +27,7 @@ for i, s in enumerate(TESTS):
     sys.stdout.flush()
 
     if platform.system() == WINDOWS:
-        s = s[:s.find("3")] + s[s.find("3"):]
+        s = s[:s.find("3")] + s[s.find("3") + 1:]
     result = subprocess.run(shlex.split(s))
 
     if result.returncode != 0:
