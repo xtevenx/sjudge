@@ -30,7 +30,10 @@ def run(args: typing.List[str], input: str, memory_limit: int, timeout: float
 
     max_memory = 0
     while process.poll() is None:
-        max_memory = max(max_memory, process.memory_full_info().rss)
+        try:
+            max_memory = max(max_memory, process.memory_info().rss)
+        except psutil.NoSuchProcess:
+            break
 
         if max_memory > memory_limit or time.time() - start_time > timeout:
             process.kill()

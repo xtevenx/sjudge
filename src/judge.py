@@ -28,6 +28,11 @@ JUDGES: typing.Dict[str, JUDGE_TYPE] = {
 
 DEFAULT_TRUNCATOR: TRUNCATOR_TYPE = lambda s: truncate.truncate(s, 200, 4)
 
+SIMPLE_CHARACTERS: typing.Dict[str, str] = {
+    "⮡": ">",
+    "→": "->",
+}
+
 
 class TestcaseResult:
     def __init__(self, given_input: TEST_IO_TYPE, given_output: TEST_IO_TYPE,
@@ -101,11 +106,10 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 
                memory_limit: int = 256, judge: JUDGE_TYPE = "default",
                truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR, problem: str = "???"
                ) -> JudgeResult:
-    print(f"Running tests for exercise: {problem}")
-    print(f"  ⮡ Time limit: {1000 * time_limit:.0f} ms")
-    print(f"  ⮡ Memory limit: {memory_limit} MiB")
-    print(f"  ⮡ Judge: {judge}")
-    print()
+    _display(f"Running tests for exercise: {problem}")
+    _display(f"  ⮡ Time limit: {1000 * time_limit:.0f} ms")
+    _display(f"  ⮡ Judge: {judge}")
+    _display()
 
     result_tracker = JudgeResult()
 
@@ -172,6 +176,12 @@ def _decode_io(process_io: str) -> TEST_IO_TYPE:
     return [s.strip("".join(['\r', '\n'])) for s in process_io.strip().split("\n")]
 
 
-def _display(s: str) -> None:
-    sys.stdout.write(f"{s}\n")
+def _display(s: str = "") -> None:
+    try:
+        sys.stdout.write(f"{s}\n")
+    except UnicodeEncodeError:
+        for old, new in SIMPLE_CHARACTERS.items():
+            s = s.replace(old, new)
+        sys.stdout.write(f"{s}\n")
+
     sys.stdout.flush()

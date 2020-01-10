@@ -1,6 +1,9 @@
+import platform
 import shlex
 import subprocess
 import sys
+
+WINDOWS = "Windows"
 
 TESTS = [
     "python3 src/main.py --list_exercises",
@@ -23,6 +26,9 @@ for i, s in enumerate(TESTS):
     sys.stdout.write(f"---- RUNNING TEST {i + 1} of {TESTS.__len__()} ----\n")
     sys.stdout.flush()
 
+    if platform.system() == WINDOWS:
+        s = s[:s.find("3")] + s[s.find("3") + 1:]
     result = subprocess.run(shlex.split(s))
+
     if result.returncode != 0:
         sys.exit(result.returncode)
