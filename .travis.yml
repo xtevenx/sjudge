@@ -1,13 +1,28 @@
 language: python
 
-python:
-  - "3.6"
-  - "3.7"
-  - "3.8"
-  - "nightly"
+jobs:
+  include:
+    - name: "Python 3.6+ on Bionic Linux"
+      python:
+        - "3.6.8"
+        - "3.7.6"
+        - "3.8.1"
+        - "nightly"
+    - name: "Python 3.7.4 on macOS"
+      os: osx
+      osx_image: xcode11.2
+      language: shell
+    - name: "Python 3.8.1 on Windows"
+      os: windows
+      language: shell
+      before_install:
+        - choco install python --version 3.8.1
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 
 install:
+  - pip install --upgrade pip
   - pip install -r requirements.txt
 
 script:
-  - python3 tests/basic_test.py
+  - python3 tests/basic_test.py || python tests/basic_test.py
