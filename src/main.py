@@ -81,14 +81,14 @@ if __name__ == "__main__":
     except SystemExit as err:
         sys.exit(*err.args)
     except KeyboardInterrupt:
-        print("Detected `KeyboardInterrupt()`, stopping judging.")
+        print("stopping judging due to user interrupt.")
     except AssertionError as err:
-        print(f"error: `{err.args[0]}`.")
+        print(f"error: {err.args[0]}.")
     except BaseException as err:
         print("<-- ERROR TRACEBACK -->")
         traceback.print_tb(err.__traceback__)
         print("  " + err.__repr__())
 
-        print("Error detected; if you believe this is a bug, please report it with the full\n"
-              "error message.")
+        print("an unexpected error has occurred; if you believe this is a bug, please \n"
+              "report it with the full error message.")
         sys.exit(1)
