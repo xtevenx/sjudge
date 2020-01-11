@@ -1,20 +1,35 @@
+"""
+This module manages getting the command to run a file based on the its
+extension.
+"""
+
 import platform
 import typing
 
+# the result of `platform.system()` on Windows 10
 WINDOWS: str = "Windows"
 
-LANGUAGE_EXTENSIONS: typing.Dict[frozenset, typing.Callable[[str], str]] = {
-    frozenset({"py", "pyc"}): lambda s: "python {}" if s == WINDOWS else "python3 {}",
-    frozenset({"jar"}): lambda s: "java -jar {}",
+# a dictionary with supported programming languages and their
+# respective commands for running:
+#     {extensions: (unix_command, windows_command)}
+LANGUAGES: typing.Dict[frozenset, typing.Tuple[str, str]] = {
+    frozenset({"py", "pyc"}): ("python3 {}", "python {}"),
+    frozenset({"jar"}): ("java -jar {}",) * 2,
 }
 
-BASE_COMMAND: str = "./{}"
+# default command to run a file
+DEFAULT_COMMAND: str = "./{}"
 
 
-def get_run_command(filename: str) -> str:
-    extension = filename.split(".")[-1]
-    for extensions, command in LANGUAGE_EXTENSIONS.items():
-        if extension in extensions:
-            command_string = command(platform.system())
-            return command_string.replace("{}", filename)
-    return BASE_COMMAND.replace("{}", filename)
+def get_command(f: str) -> str:
+    """
+    Get the command to run a file based on its file extension.
+    :param f: name of the file of which to get the command
+    :return: command to run the file
+    """
+
+    ext = f.split(".")[-1]
+    for language_ext, commands in LANGUAGES.items():
+        if ext in language_ext:
+            return commands[platform.system() == WINDOWS].replace("{}", f)
+    return DEFAULT_COMMAND.replace("{}", f)

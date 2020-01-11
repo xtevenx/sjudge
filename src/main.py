@@ -70,7 +70,7 @@ def main():
         sys.exit(0)
 
     judge.judge_file(
-        command.get_run_command(arguments.program_path),
+        command.get_command(arguments.program_path),
         **json.load(open(exercise_test_path, "r"))
     )
 
