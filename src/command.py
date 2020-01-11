@@ -31,5 +31,5 @@ def get_command(f: str) -> str:
     ext = f.split(".")[-1]
     for language_ext, commands in LANGUAGES.items():
         if ext in language_ext:
-            return commands[platform.system() == WINDOWS].replace("{}", f)
+            return commands[platform.system() == WINDOWS].format(f)
     return DEFAULT_COMMAND.replace("{}", f)
