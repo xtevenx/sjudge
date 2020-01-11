@@ -104,9 +104,9 @@ class JudgeResult:
 
 def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 1.0,
                memory_limit: int = 256, judge: JUDGE_TYPE = "default",
-               truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR, problem: str = "???"
+               truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR, exercise: str = "???"
                ) -> JudgeResult:
-    _display(f"Running tests for exercise: {problem}")
+    _display(f"Running tests for exercise: {exercise}")
     _display(f"  ⮡ Time limit: {1000 * time_limit:.0f} ms")
     _display(f"  ⮡ Judge: {judge}")
     _display()
