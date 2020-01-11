@@ -36,7 +36,7 @@ def main():
     )
 
     if arguments.list_exercises:
-        lessons_list = exercise.get_exercises_list(exercises_location)
+        lessons_list = exercise.list_exercises(exercises_location)
         lessons_list = [f"  - {lesson_name}" for lesson_name in lessons_list]
 
         print(f"Found {len(lessons_list)} lessons:")
@@ -48,7 +48,7 @@ def main():
             print("error: no exercise name specified")
         else:
             try:
-                print(exercise.get_exercise_description(
+                print(exercise.get_description(
                     exercises_location, arguments.exercise_name
                 ))
             except FileNotFoundError:
