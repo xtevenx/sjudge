@@ -53,7 +53,7 @@ def get_description(path: str, ex_name: str) -> str:
     return_str += "\n"
 
     desc_path = os.path.join(path, f"{ex_name}.txt")
-    assert os.path.isfile(desc_path), f"the exercise `{ex_name}` does not exist."
+    assert os.path.isfile(desc_path), f"the exercise `{ex_name}` does not exist"
 
     with open(desc_path, "r") as fd:
         return_str += fd.read()
@@ -70,7 +70,7 @@ def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
     """
 
     desc_path: str = os.path.join(path, f"{ex_name}.json")
-    assert os.path.isfile(desc_path), f"the exercise `{ex_name}` does not exist."
+    assert os.path.isfile(desc_path), f"the exercise `{ex_name}` does not exist"
 
     try:
         with open(desc_path, "r") as fd:
@@ -83,7 +83,7 @@ def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
         return specs
 
     except (json.JSONDecodeError, AssertionError):
-        raise AssertionError(f"the file `{desc_path}` is corrupt; please generate it again.")
+        raise AssertionError(f"the file `{desc_path}` is corrupt; please generate it again")
 
 
 def list_exercises(path: str) -> typing.List[str]:
@@ -93,7 +93,7 @@ def list_exercises(path: str) -> typing.List[str]:
     :return: names of all the exercises
     """
 
-    assert os.path.isdir(path), f"the exercises location `{path}` is not a directory."
+    assert os.path.isdir(path), f"the exercises location `{path}` is not a directory"
 
     found_lessons: typing.List[str] = []
     all_names = frozenset(f.split(".")[0] for f in os.listdir(path))
