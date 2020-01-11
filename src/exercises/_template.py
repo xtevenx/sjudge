@@ -12,8 +12,8 @@ IO_TYPE: typing.Type = typing.List[str]
 TEST_TYPE: typing.Type = typing.Tuple[IO_TYPE, IO_TYPE]
 
 # Set the name of the exercise for which to generate testing data (this
-# file should be called f"{EXERCISE_NAME}_.py").
-EXERCISE_NAME: str = __file__[:-4]
+# file should be called EXERCISE_NAME.py).
+EXERCISE_NAME: str = __file__[:-3]
 
 # define all required exercise specifications.
 EXERCISE_SPECIFICATIONS: typing.Dict[str, typing.Any] = {
