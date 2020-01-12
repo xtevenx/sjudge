@@ -69,7 +69,7 @@ def main():
         print(f"error: program `{arguments.program_path}` does not exist.")
         sys.exit(0)
 
-    judge.judge_file(
+    judge.judge_program(
         command.get_command(arguments.program_path),
         **json.load(open(exercise_test_path, "r"))
     )
