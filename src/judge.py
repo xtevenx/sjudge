@@ -72,7 +72,7 @@ class TestcaseResult:
         self.program_memory: int = program_memory
         self.program_mle: bool = program_mle
 
-        if type(judge_func) == str:
+        if isinstance(judge_func, str):
             judge_func = JUDGES[judge_func]
         self.judge_func: JUDGE_TYPE = judge_func
 
