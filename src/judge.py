@@ -1,3 +1,7 @@
+"""
+This module manages the judging of a program.
+"""
+
 import shlex
 import typing
 
@@ -9,7 +13,7 @@ import test
 import truncate
 
 IO_TYPE: typing.Type = typing.List[str]
-TESTCASE_TYPE: typing.Type = typing.List[typing.Tuple[IO_TYPE, IO_TYPE]]
+TESTCASE_TYPE: typing.Type = typing.Tuple[IO_TYPE, IO_TYPE]
 JUDGE_TYPE: typing.Type = typing.Callable[[IO_TYPE, IO_TYPE], bool]
 ANY_JUDGE: typing.Type = typing.Union[str, JUDGE_TYPE]
 TRUNCATOR_TYPE: typing.Type = typing.Callable[[IO_TYPE], IO_TYPE]
@@ -36,6 +40,20 @@ class TestcaseResult:
                  program_time: float = 0, program_tle: bool = False,
                  program_memory: int = 0, program_mle: bool = False,
                  judge_func: ANY_JUDGE = "default"):
+        """
+        A class to keep track of a test case result.
+        :param exercise_input: input given by exercise
+        :param exercise_output: output given by exercise
+        :param program_stdout: the test program's output
+        :param program_stderr: the test program's errors
+        :param program_exitcode: the test program's exit code
+        :param program_time: the amount of time used by the test program
+        :param program_tle: whether the test program ran out of time
+        :param program_memory: the amount of memory used by the test program
+        :param program_mle: whether the test program ran out of memory
+        :param judge_func: the judging function
+        """
+
         self.exercise_input: IO_TYPE = exercise_input
         self.exercise_output: IO_TYPE = exercise_output
         self.program_stdout: IO_TYPE = program_stdout
@@ -54,6 +72,11 @@ class TestcaseResult:
         self.passed: bool = self.verdict == ANSWER_CORRECT
 
     def _get_verdict(self) -> str:
+        """
+        Get the result of this test based on initialization data.
+        :return: the judging verdict
+        """
+
         if self.program_tle:
             return TIME_LIMIT_EXCEEDED
         elif self.program_mle:
@@ -66,8 +89,15 @@ class TestcaseResult:
 
 
 class JudgeResult:
-    def __init__(self) -> None:
+    def __init__(self, test_results: typing.List[TestcaseResult] = ()) -> None:
+        """
+        A class to keep track of an entire set of tests.
+        :param test_results: test cases of which to keep track
+        """
+
         self.testcases: typing.List[TestcaseResult] = []
+        for tc in test_results:
+            self.add_result(tc)
 
         self.passed: int = 0
         self.total: int = 0
@@ -88,6 +118,12 @@ class JudgeResult:
         return iter(self.testcases)
 
     def add_result(self, tc: TestcaseResult) -> None:
+        """
+        Add a test case to this set of tests.
+        :param tc: test case to add
+        :return: None
+        """
+
         self.testcases.append(tc)
 
         self.passed += tc.passed
@@ -100,9 +136,9 @@ class JudgeResult:
             self.verdict = tc.verdict
 
 
-def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 1.0,
-               memory_limit: int = 256, judge: JUDGE_TYPE = "default",
-               truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR, exercise: str = "???"
+def judge_file(file_command: str, testcases: typing.List[TESTCASE_TYPE],
+               exercise: str = "???", time_limit: float = 1.0, memory_limit: int = 256,
+               judge: JUDGE_TYPE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
                ) -> JudgeResult:
     display.display(f"Running tests for exercise: {exercise}")
     display.display(f"  ⮡ Time limit: {1000 * time_limit:.0f} ms")
@@ -164,6 +200,23 @@ def judge_file(file_command: str, testcases: TESTCASE_TYPE, time_limit: float = 
         result_tracker.passed, result_tracker.total, details
     ))
     return result_tracker
+
+
+def judge_one(file_command: str, testcase: TESTCASE_TYPE, exercise: str = "???",
+              time_limit: float = 1.0, memory_limit: int = 256,
+              judge: JUDGE_TYPE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
+              ) -> TestcaseResult:
+    """
+    Judges a file on one test case
+    :param file_command:
+    :param testcase:
+    :param exercise:
+    :param time_limit:
+    :param memory_limit:
+    :param judge:
+    :param truncator:
+    :return:
+    """
 
 
 def _encode_io(given_io: IO_TYPE) -> str:
