@@ -18,27 +18,27 @@ Along with it also comes with a set of advantages and disadvantages:
 
 Advantages:
 
-* Simple design for easy configurability.
-* No fear of students trying to undermine your machine.
+*   Simple design for easy configurability.
+*   No fear of students trying to undermine your machine.
 
 Disadvantages:
 
-* Programs' performance is affected by machine usage.
-* Smart students can technically access the test cases.
+*   Programs' performance is affected by machine usage.
+*   Smart students can technically access the test cases.
 
 Supported Platforms
 -------------------
 
 Operating systems:
 
-* Ubuntu 16.04 LTS (Xenial Xerus)
-* Ubuntu 18.04 LTS (Bionic Beaver)
-* Windows 10
+*   Ubuntu 16.04 LTS (Xenial Xerus)
+*   Ubuntu 18.04 LTS (Bionic Beaver)
+*   Windows 10
 
 Python versions:
 
-* Python 3.7.x
-* Python 3.8.x
+*   Python 3.7.x
+*   Python 3.8.x
 
 Setup
 -----
@@ -64,8 +64,8 @@ If hiding the location of the exercises is desired, you can compile `sjudge` int
 `sjudge` comes with a very minimal set of exercises.
 To add more, look at the template files located in `exercises/` for guidance:
 
-  * `exercises/_template.txt` is the template of an exercise description.
-  * `exercises/_template.py` is the template of a test case generation script.
+*   `exercises/_template.txt` is the template of an exercise description.
+*   `exercises/_template.py` is the template of a test case generation script.
 
 After the `.txt` (exercise description) and `.py` (test case generation) scripts have been created (both bearing the same name: the name of the new exercise), run the `.py` file to generate the test cases.
 The new exercise name should now be listed when you run `python3 main.py --list_exercises`.
