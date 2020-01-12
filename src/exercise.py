@@ -1,68 +1,109 @@
+"""
+This module manages the loading of exercise details.
+"""
+
 import json
 import os
 import typing
 
-SPEC_TYPE: typing.Type = typing.Dict[typing.AnyStr, typing.Any]
+SPEC_TYPE: typing.Type = typing.Dict[str, typing.Any]
 
-REQUIRED_COMPONENTS: typing.List[str] = [
-    "json",  # problem specifications
-    "txt",  # problem description
+REQUIRED_FILES: typing.List[str] = [
+    "json",  # exercise specifications
+    "py",  # test case generation
+    "txt",  # exercise description
+]
+
+REQUIRED_SPECS: typing.List[str] = [
+    "exercise",
+    "judge",
+    "time_limit",
+    "memory_limit",
+    "testcases",
 ]
 
 SPEC_FORMATTING: typing.Dict[str, str] = {
-    "problem": "{key}: {value}\n",
     "time_limit": "{key}: {value} s",
     "memory_limit": "{key}: {value} MiB",
 }
 
 
-def get_exercises_list(exercises_directory: str) -> typing.List[str]:
-    assert os.path.isdir(exercises_directory), \
-        f"The exercises location `{exercises_directory}` is not a directory."
+def get_description(path: str, ex_name: str) -> str:
+    """
+    Get the exercise description of `ex_name` located in `path`. This
+    also gets the specifications from the ".json" file.
+    :param path: the directory of the exercise
+    :param ex_name: the name of the exercise
+    :return: the description (along with the specs)
+    """
 
-    found_lessons: typing.List[str] = []
-    failed_lessons: typing.List[str] = []
+    return_str = ""
 
-    all_files: typing.Iterable[str] = (
-        f.split(".")[0] for f in os.listdir(exercises_directory)
-        if f.split(".")[0] not in found_lessons and f.split(".")[0] not in failed_lessons
-    )
-
-    for exercise_name in all_files:
-        for file_ext in REQUIRED_COMPONENTS:
-            path = os.path.join(exercises_directory, f"{exercise_name}.{file_ext}")
-            if not os.path.isfile(path):
-                break
-        else:
-            found_lessons.append(exercise_name)
-            continue
-        failed_lessons.append(exercise_name)
-
-    return sorted(found_lessons)
-
-
-def get_exercise_description(exercises_directory: str, exercise_name: str) -> str:
-    description = ""
-
-    spec_path = os.path.join(exercises_directory, f"{exercise_name}.json")
-    specs: SPEC_TYPE = json.load(open(spec_path, "r"))
-    for key, value in specs.items():
+    for key, value in get_specs(path, ex_name).items():
         if key == "testcases":
             continue
+
         formatted_key = key.replace("_", " ").capitalize()
 
         try:
-            description += SPEC_FORMATTING[key].format(
-                key=formatted_key, value=value
-            ) + "\n"
+            return_str += SPEC_FORMATTING[key].format(key=formatted_key, value=value) + "\n"
         except KeyError:
-            description += f"{formatted_key}: {value}\n"
+            return_str += f"{formatted_key}: {value}\n"
 
-    description += "\n"
+    return_str += "\n"
 
-    file_path = os.path.join(exercises_directory, f"{exercise_name}.txt")
-    file_handle = open(file_path, "r")
-    description += file_handle.read()
-    file_handle.close()
+    desc_path = os.path.join(path, f"{ex_name}.txt")
+    assert os.path.isfile(desc_path), f"the exercise `{ex_name}` does not exist"
 
-    return description
+    with open(desc_path, "r") as fd:
+        return_str += fd.read()
+
+    return return_str
+
+
+def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
+    """
+    Get the exercise specifications of `ex_name` located in `path`.
+    :param path: the directory of the exercise
+    :param ex_name: the name of the exercise
+    :return: the specifications
+    """
+
+    desc_path: str = os.path.join(path, f"{ex_name}.json")
+    assert os.path.isfile(desc_path), f"the exercise `{ex_name}` does not exist"
+
+    try:
+        with open(desc_path, "r") as fd:
+            specs: SPEC_TYPE = json.load(fd)
+
+        for spec_name in REQUIRED_SPECS:
+            if spec_name not in specs:
+                raise AssertionError
+
+        return specs
+
+    except (json.JSONDecodeError, AssertionError):
+        raise AssertionError(f"the file `{desc_path}` is corrupt; please generate it again")
+
+
+def list_exercises(path: str) -> typing.List[str]:
+    """
+    Get the names of all the exercises found in `path`.
+    :param path: the directory of the exercises
+    :return: names of all the exercises
+    """
+
+    assert os.path.isdir(path), f"the exercises location `{path}` is not a directory"
+
+    found_lessons: typing.List[str] = []
+    all_names = frozenset(f.split(".")[0] for f in os.listdir(path))
+
+    for ex_name in all_names:
+        for file_ext in REQUIRED_FILES:
+            ex_path = os.path.join(path, f"{ex_name}.{file_ext}")
+            if not os.path.isfile(ex_path):
+                break
+        else:
+            found_lessons.append(ex_name)
+
+    return found_lessons

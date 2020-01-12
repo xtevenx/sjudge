@@ -13,7 +13,7 @@ def truncate(s: typing.List[str], character_limit: typing.Optional[int],
     newline_limit = INFINITY if newline_limit is None else newline_limit
 
     return_s: typing.List[str] = []
-    for i, line in enumerate(s):
+    for line in s:
         if len(line) > character_limit:
             return_s.append(line[:character_limit])
             return_s.append(TRUNCATED_STRING)

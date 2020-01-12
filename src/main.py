@@ -36,7 +36,7 @@ def main():
     )
 
     if arguments.list_exercises:
-        lessons_list = exercise.get_exercises_list(exercises_location)
+        lessons_list = exercise.list_exercises(exercises_location)
         lessons_list = [f"  - {lesson_name}" for lesson_name in lessons_list]
 
         print(f"Found {len(lessons_list)} lessons:")
@@ -48,7 +48,7 @@ def main():
             print("error: no exercise name specified")
         else:
             try:
-                print(exercise.get_exercise_description(
+                print(exercise.get_description(
                     exercises_location, arguments.exercise_name
                 ))
             except FileNotFoundError:
@@ -70,7 +70,7 @@ def main():
         sys.exit(0)
 
     judge.judge_file(
-        command.get_run_command(arguments.program_path),
+        command.get_command(arguments.program_path),
         **json.load(open(exercise_test_path, "r"))
     )
 
@@ -81,16 +81,14 @@ if __name__ == "__main__":
     except SystemExit as err:
         sys.exit(*err.args)
     except KeyboardInterrupt:
-        print("Detected `KeyboardInterrupt()`, stopping judging.")
+        print("stopping judging due to user interrupt.")
     except AssertionError as err:
-        full_error = "\n".join(err.args)
-        print(f"Detected error: `{full_error}`; this should not be a bug (please check your "
-              f"configurations).")
+        print(f"error: {err.args[0]}.")
     except BaseException as err:
         print("<-- ERROR TRACEBACK -->")
         traceback.print_tb(err.__traceback__)
         print("  " + err.__repr__())
 
-        print("Error detected; if you believe this is a bug, please report it with the full\n"
-              "error message.")
+        print("an unexpected error has occurred; if you believe this is a bug, please \n"
+              "report it with the full error message.")
         sys.exit(1)

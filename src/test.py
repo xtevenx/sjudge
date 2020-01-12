@@ -14,7 +14,7 @@ class CompletedProcess(subprocess.CompletedProcess):
         self.memory_exceeded: bool = memory_exceeded
 
 
-def run(args: typing.List[str], input: str, memory_limit: int, timeout: float
+def run(args: typing.List[str], ex_input: str, memory_limit: int, timeout: float
         ) -> CompletedProcess:
     process = psutil.Popen(
         args,
@@ -25,7 +25,7 @@ def run(args: typing.List[str], input: str, memory_limit: int, timeout: float
     )
 
     start_time = time.time()
-    process.stdin.write(input)
+    process.stdin.write(ex_input)
     process.stdin.flush()
 
     max_memory = 0
