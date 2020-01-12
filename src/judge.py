@@ -150,7 +150,7 @@ def judge_file(file_command: str, testcases: typing.List[TESTCASE_TYPE],
     for test_number, (test_input, test_output) in enumerate(testcases):
         process_return = test.run(
             shlex.split(file_command),
-            input=_encode_io(test_input),
+            ex_input=_encode_io(test_input),
             timeout=time_limit,
             memory_limit=1024 * 1024 * memory_limit,
         )
