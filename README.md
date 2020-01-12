@@ -2,6 +2,7 @@ sjudge
 ======
 
 [![Build Status](https://travis-ci.com/steven-xia/sjudge.svg?branch=master)](https://travis-ci.com/steven-xia/sjudge)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ae9bf334e0f840df84ad41126353396c)](https://www.codacy.com/manual/steven-xia/sjudge?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=steven-xia/sjudge&amp;utm_campaign=Badge_Grade)
 
 `sjudge` is a client-side programming judge made for use as a teaching tool.
 It is programmed in pure Python and designed to be as simple and robust as possible.
