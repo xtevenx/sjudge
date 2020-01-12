@@ -17,26 +17,26 @@ Along with it also comes with a set of advantages and disadvantages:
 
 Advantages:
 
-  * Simple design for easy configurability.
-  * No fear of students trying to undermine your machine.
+* Simple design for easy configurability.
+* No fear of students trying to undermine your machine.
 
 Disadvantages:
 
-  * Programs' performance is affected by machine usage.
-  * Smart students can technically access the test cases.
+* Programs' performance is affected by machine usage.
+* Smart students can technically access the test cases.
 
 ### Supported Platforms
 
 Operating systems:
 
-  * Ubuntu 16.04 LTS (Xenial Xerus)
-  * Ubuntu 18.04 LTS (Bionic Beaver)
-  * Windows 10
+* Ubuntu 16.04 LTS (Xenial Xerus)
+* Ubuntu 18.04 LTS (Bionic Beaver)
+* Windows 10
 
 Python versions:
 
-  * Python 3.7.x
-  * Python 3.8.x
+* Python 3.7.x
+* Python 3.8.x
 
 ## Setup
 
