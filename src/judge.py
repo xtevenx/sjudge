@@ -9,7 +9,7 @@ import display
 from judges import float_judge
 from judges import identical_judge
 from judges import default_judge
-import test
+import run
 import truncate
 
 # define types
@@ -223,10 +223,10 @@ def judge_one(program_command: str, test_input: IO_TYPE, test_output: IO_TYPE,
     :return: result of the test case
     """
 
-    process_return = test.run(
+    process_return = run.run(
         shlex.split(program_command),
-        ex_input=_encode_io(test_input),
-        timeout=time_limit,
+        stdin_string=_encode_io(test_input),
+        time_limit=time_limit,
         memory_limit=MEBIBYTE * memory_limit,
     )
 
@@ -236,9 +236,9 @@ def judge_one(program_command: str, test_input: IO_TYPE, test_output: IO_TYPE,
 
     return TestcaseResult(
         test_input, test_output, process_output, process_errors, process_exitcode,
-        program_time=MILLISECOND * process_return.time_taken,
-        program_tle=process_return.timed_out,
-        program_memory=process_return.max_memory,
+        program_time=MILLISECOND * process_return.time_usage,
+        program_tle=process_return.time_exceeded,
+        program_memory=process_return.memory_usage,
         program_mle=process_return.memory_exceeded,
         judge_func=judge
     )
