@@ -9,28 +9,36 @@ import display
 from judges import float_judge
 from judges import identical_judge
 from judges import default_judge
-import test
+import run
 import truncate
 
+# define types
 IO_TYPE: typing.Type = typing.List[str]
 TESTCASE_TYPE: typing.Type = typing.Tuple[IO_TYPE, IO_TYPE]
 JUDGE_TYPE: typing.Type = typing.Callable[[IO_TYPE, IO_TYPE], bool]
 ANY_JUDGE: typing.Type = typing.Union[str, JUDGE_TYPE]
 TRUNCATOR_TYPE: typing.Type = typing.Callable[[IO_TYPE], IO_TYPE]
 
+# define judging verdicts
 ANSWER_CORRECT: str = "Answer Correct"
 RUNTIME_ERROR: str = "Runtime Error"
 TIME_LIMIT_EXCEEDED: str = "Time Limit Exceeded"
 MEM_LIMIT_EXCEEDED: str = "Memory Limit Exceeded"
 WRONG_ANSWER: str = "Wrong Answer"
 
+# define judging functions
 JUDGES: typing.Dict[str, JUDGE_TYPE] = {
     "float": float_judge.float_judge,
     "identical": identical_judge.identical_judge,
     "default": default_judge.default_judge
 }
 
+# define I/O truncator
 DEFAULT_TRUNCATOR: TRUNCATOR_TYPE = lambda s: truncate.truncate(s, 200, 4)
+
+# define other utilities
+MEBIBYTE: int = 1024 * 1024
+MILLISECOND: int = 1000
 
 
 class TestcaseResult:
@@ -64,7 +72,7 @@ class TestcaseResult:
         self.program_memory: int = program_memory
         self.program_mle: bool = program_mle
 
-        if type(judge_func) == str:
+        if isinstance(judge_func, str):
             judge_func = JUDGES[judge_func]
         self.judge_func: JUDGE_TYPE = judge_func
 
@@ -136,45 +144,41 @@ class JudgeResult:
             self.verdict = tc.verdict
 
 
-def judge_file(file_command: str, testcases: typing.List[TESTCASE_TYPE],
-               exercise: str = "???", time_limit: float = 1.0, memory_limit: int = 256,
-               judge: JUDGE_TYPE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
-               ) -> JudgeResult:
+def judge_program(program_command: str, testcases: typing.List[TESTCASE_TYPE],
+                  exercise: str = "???", time_limit: float = 1.0, memory_limit: int = 256,
+                  judge: JUDGE_TYPE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
+                  ) -> JudgeResult:
+    """
+    Judge a program on a set of test cases.
+    :param program_command: command to run the program
+    :param testcases: list of inputs and respective outputs for all
+        the test cases.
+    :param exercise: name of the exercise
+    :param time_limit: time limit for the exercise
+    :param memory_limit: memory limit for the exercise
+    :param judge: judging function for the exercise
+    :param truncator: truncating function for the exercise
+    :return: list of results from every test case
+    """
+
     display.display(f"Running tests for exercise: {exercise}")
-    display.display(f"  ⮡ Time limit: {1000 * time_limit:.0f} ms")
+    display.display(f"  ⮡ Time limit: {MILLISECOND * time_limit:.0f} ms")
+    display.display(f"  ⮡ Memory limit: {memory_limit} MiB")
     display.display(f"  ⮡ Judge: {judge}")
     display.display()
 
     result_tracker = JudgeResult()
 
     for test_number, (test_input, test_output) in enumerate(testcases):
-        process_return = test.run(
-            shlex.split(file_command),
-            ex_input=_encode_io(test_input),
-            timeout=time_limit,
-            memory_limit=1024 * 1024 * memory_limit,
+        this_result = judge_one(
+            program_command, test_input, test_output, time_limit, memory_limit, judge
         )
 
-        process_output = _decode_io(process_return.stdout)
-        process_errors = _decode_io(process_return.stderr)
-        process_exitcode = process_return.returncode
-
-        time_taken = 1000 * min(time_limit, process_return.time_taken)
-        result_tracker += TestcaseResult(
-            test_input, test_output, process_output, process_errors, process_exitcode,
-            program_time=time_taken,
-            program_tle=process_return.timed_out,
-            program_memory=process_return.max_memory,
-            program_mle=process_return.memory_exceeded,
-            judge_func=judge
-        )
-
-        this_result = result_tracker[-1]
         display.display("Case #{} → {}  [{:.0f} ms, {:.2f} MiB]".format(
             test_number + 1,
             this_result.verdict,
             this_result.program_time,
-            this_result.program_memory / 1024 / 1024
+            this_result.program_memory / MEBIBYTE
         ))
 
         if this_result.verdict == RUNTIME_ERROR:
@@ -189,34 +193,55 @@ def judge_file(file_command: str, testcases: typing.List[TESTCASE_TYPE],
             display.display("  Received output:")
             display.display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.program_stdout)))
 
-    details = (
-        ("{:.0f} ms, {:.2f} MiB".format(
-            result_tracker.maximum_time,
-            result_tracker.maximum_memory / 1024 / 1024
-        ))
-        if result_tracker.verdict == ANSWER_CORRECT else result_tracker.verdict
-    )
+        result_tracker += this_result
+
+    if result_tracker.verdict == ANSWER_CORRECT:
+        details = "{:.0f} ms, {:.2f} MiB".format(
+            result_tracker.maximum_time, result_tracker.maximum_memory / MEBIBYTE
+        )
+    else:
+        details = result_tracker.verdict
+
     display.display("Final score: {}/{}  [{}]".format(
         result_tracker.passed, result_tracker.total, details
     ))
+
     return result_tracker
 
 
-def judge_one(file_command: str, testcase: TESTCASE_TYPE, exercise: str = "???",
-              time_limit: float = 1.0, memory_limit: int = 256,
-              judge: JUDGE_TYPE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
+def judge_one(program_command: str, test_input: IO_TYPE, test_output: IO_TYPE,
+              time_limit: float = 1.0, memory_limit: int = 256, judge: JUDGE_TYPE = "default"
               ) -> TestcaseResult:
     """
-    Judges a file on one test case
-    :param file_command:
-    :param testcase:
-    :param exercise:
-    :param time_limit:
-    :param memory_limit:
-    :param judge:
-    :param truncator:
-    :return:
+    Judge a program on a single test case.
+    :param program_command: command to run the program
+    :param test_input: input for the test case
+    :param test_output: output for the test case
+    :param time_limit: time limit for the test case
+    :param memory_limit: memory limit for the test case
+    :param judge: judging function for the exercise
+    :return: result of the test case
     """
+
+    process_return = run.run(
+        shlex.split(program_command),
+        stdin_string=_encode_io(test_input),
+        time_limit=time_limit,
+        memory_limit=MEBIBYTE * memory_limit,
+    )
+
+    process_output = _decode_io(process_return.stdout)
+    process_errors = _decode_io(process_return.stderr)
+    process_exitcode = process_return.returncode
+
+    return TestcaseResult(
+        test_input, test_output, process_output, process_errors, process_exitcode,
+        program_time=MILLISECOND * process_return.time_usage,
+        program_tle=process_return.time_exceeded,
+        program_memory=process_return.memory_usage,
+        program_mle=process_return.memory_exceeded,
+        judge_func=judge
+    )
 
 
 def _encode_io(given_io: IO_TYPE) -> str:

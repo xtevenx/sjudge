@@ -7,8 +7,10 @@ import typing
 
 # characters to use when console doesn't support Unicode
 SIMPLE_CHARACTERS: typing.Dict[str, str] = {
-    "⮡": ">",
+    "⮡": "\\>",
     "→": "->",
+    "⯇": "<",
+    "⯈": ">",
 }
 
 
