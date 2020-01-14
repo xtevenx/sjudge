@@ -17,9 +17,9 @@ SIMPLE_CHARACTERS: typing.Dict[str, str] = {
 def display(s: str = "") -> None:
     """
     Write `s` to standard output. Simplifies Unicode characters if
-    they are not supported.
-    :param s: string to write
-    :return: None
+    they are not supported by the console.
+
+    :param s: the string to write to standard output.
     """
 
     try:

@@ -1,6 +1,6 @@
 """
-This module manages getting the command to run a file based on the its
-extension.
+This module contains a function for getting the command to run a file
+based on the its extension.
 """
 
 import platform
@@ -24,8 +24,10 @@ DEFAULT_COMMAND: str = "./{}"
 def get_command(f: str) -> str:
     """
     Get the command to run a file based on its file extension.
-    :param f: name of the file of which to get the command
-    :return: command to run the file
+
+    :param f: a string; the name of the file of which to get the
+        command.
+    :return: a string; the command to run the file.
     """
 
     ext = f.split(".")[-1]

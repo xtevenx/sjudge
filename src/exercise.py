@@ -1,5 +1,5 @@
 """
-This module manages the loading of exercise details.
+This module manages the loading of exercise related information.
 """
 
 import json
@@ -30,11 +30,14 @@ SPEC_FORMATTING: typing.Dict[str, str] = {
 
 def get_description(path: str, ex_name: str) -> str:
     """
-    Get the exercise description of `ex_name` located in `path`. This
-    also gets the specifications from the ".json" file.
-    :param path: the directory of the exercise
-    :param ex_name: the name of the exercise
-    :return: the description (along with the specs)
+    Get the exercise description of the exercise `ex_name` located in
+    the directory `path`.
+
+    :param path: a string; the directory in which the exercise is
+        located.
+    :param ex_name: a string; the name of the exercise.
+    :return: a string; the description (along with the specifications)
+        of the exercise.
     """
 
     return_str = ""
@@ -64,10 +67,16 @@ def get_description(path: str, ex_name: str) -> str:
 
 def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
     """
-    Get the exercise specifications of `ex_name` located in `path`.
-    :param path: the directory of the exercise
-    :param ex_name: the name of the exercise
-    :return: the specifications
+    Get the exercise specifications of the exercise `ex_name` located
+    in the directory `path`.
+
+    :param path: a string; the directory in which the exercise is
+        located.
+    :param ex_name: a string; the name of the exercise.
+    :return: `SPEC_TYPE`; a dictionary with each of its keys
+        being the name of a specification.
+
+            ex: {"judge": "default", "time_limit": 2.0, ... }
     """
 
     desc_path: str = os.path.join(path, f"{ex_name}.json")
@@ -90,9 +99,12 @@ def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
 
 def list_exercises(path: str) -> typing.List[str]:
     """
-    Get the names of all the exercises found in `path`.
-    :param path: the directory of the exercises
-    :return: names of all the exercises
+    Get the names of all the exercises found in the directory `path`.
+
+    :param path: a string; the directory in which to look for
+        exercises.
+    :return: a list of strings; the names of all the exercises located
+        in the directory `path`.
     """
 
     if not os.path.isdir(path):

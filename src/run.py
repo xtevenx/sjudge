@@ -18,12 +18,13 @@ class CompletedProcess(subprocess.CompletedProcess):
         :param args: arguments to pass to the parent.
         :param time_taken: a float; the time (in seconds) it took to
             run the program.
-        :param timed_out: a boolean; whether the program hit the time
-            limit and was killed.
+        :param timed_out: a boolean; `True` if the program exceeded the
+            time limit and was killed.
         :param max_memory: an integer; the memory (in bytes) it took to
             run the program.
-        :param memory_exceeded: a boolean; whether the program hit the
-            memory limit and was killed.
+        :param memory_exceeded: a boolean; `True` if the program
+            exceeded the memory limit and was killed memory limit and
+            was killed.
         :param kwargs: keyword arguments to pass to the parent
         """
 
@@ -40,11 +41,13 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
     Run command with arguments and return a `CompletedProcess`
     instance.
 
-    This function is a wrapper around `subprocess.run` and provides a
-    simplified interface and also measures more metrics.
+    This function is a wrapper around `subprocess.run()` and provides a
+    simplified interface and also measures the following metrics:
+      - time usage
+      - memory usage
 
-    :param args: a sequence of program arguments
-    :param stdin_string: a string to pass to the subprocess from
+    :param args: the sequence of program arguments
+    :param stdin_string: the string to pass to the subprocess from
         standard input.
     :param memory_limit: an integer; the maximum memory (in bytes)
         allowed for the program to utilize before killing it.

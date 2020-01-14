@@ -1,5 +1,5 @@
 """
-This module manages the truncation of messages for cleaner display.
+This module manages the truncation of messages for a cleaner output.
 """
 
 import typing
@@ -14,11 +14,16 @@ TRUNCATED_STRING: str = "⯇truncated⯈"
 def truncate(s: typing.List[str], char_limit: typing.Optional[int] = None,
              nl_limit: typing.Optional[int] = None) -> typing.List[str]:
     """
-    Truncate a string based on a given character and newline limit.
-    :param s: string to truncate
-    :param char_limit: maximum characters in the truncated string
-    :param nl_limit: maximum newlines in the truncated string
-    :return: truncated string (based on `char_limit` and `nl_limit`)
+    Truncate a given string to either `char_limit` characters or
+    `nl_limit` lines, using the first one that occurs.
+
+    :param s: a list of strings; the thing to truncate (each string in
+        the list represents one line of a program's output).
+    :param char_limit: an integer; the maximum number of characters in
+        the truncated string.
+    :param nl_limit: an integer; the maximum number of newlines in the
+        truncated string.
+    :return: a list of strings; the truncated output.
     """
 
     if char_limit is None and nl_limit is None:
