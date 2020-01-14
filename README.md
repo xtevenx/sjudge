@@ -2,7 +2,6 @@ sjudge
 ======
 
 [![Build Status](https://img.shields.io/travis/com/steven-xia/sjudge?logo=travis)](https://travis-ci.com/steven-xia/sjudge)
-[![Code Quality](https://img.shields.io/codacy/grade/ae9bf334e0f840df84ad41126353396c?logo=codacy)](https://www.codacy.com/manual/steven-xia/sjudge?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=steven-xia/sjudge&amp;utm_campaign=Badge_Grade)
 [![LGTM Grade](https://img.shields.io/lgtm/grade/python/github/steven-xia/sjudge?logo=lgtm)](https://lgtm.com/projects/g/steven-xia/sjudge)
 [![Code Size](https://img.shields.io/github/languages/code-size/steven-xia/sjudge)](https://github.com/steven-xia/sjudge)
 [![Dependencies](https://img.shields.io/librariesio/github/steven-xia/sjudge?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge/blob/master/requirements.txt)
