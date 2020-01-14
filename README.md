@@ -1,11 +1,12 @@
 sjudge
 ======
 
-[![Build Status](https://img.shields.io/travis/com/steven-xia/sjudge)](https://travis-ci.com/steven-xia/sjudge)
-[![Code Quality](https://img.shields.io/codacy/grade/ae9bf334e0f840df84ad41126353396c)](https://www.codacy.com/manual/steven-xia/sjudge?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=steven-xia/sjudge&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://img.shields.io/travis/com/steven-xia/sjudge?logo=travis)](https://travis-ci.com/steven-xia/sjudge)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/steven-xia/sjudge.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/steven-xia/sjudge/context:python)
 [![Code Size](https://img.shields.io/github/languages/code-size/steven-xia/sjudge)](https://github.com/steven-xia/sjudge)
-[![Dependencies](https://img.shields.io/librariesio/github/steven-xia/sjudge)](https://github.com/steven-xia/sjudge/blob/master/requirements.txt)
-[![License](https://img.shields.io/github/license/steven-xia/sjudge)](https://github.com/steven-xia/sjudge/blob/master/LICENSE)
+[![Dependencies](https://img.shields.io/librariesio/github/steven-xia/sjudge?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge/blob/master/requirements.txt)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/steven-xia/sjudge.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/steven-xia/sjudge/alerts/)
+[![License](https://img.shields.io/github/license/steven-xia/sjudge?logo=open-source-initiative&logoColor=white)](https://github.com/steven-xia/sjudge/blob/master/LICENSE)
 
 `sjudge` is a client-side programming judge made for use as a teaching tool.
 It is programmed in pure Python and designed to be as simple and robust as possible.

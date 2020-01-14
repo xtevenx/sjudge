@@ -71,7 +71,7 @@ if __name__ == "__main__":
         print("stopping judging due to user interrupt.")
     except SystemExit as err:
         sys.exit(*err.args)
-    except BaseException as err:
+    except Exception as err:
         print("<-- ERROR TRACEBACK -->")
         traceback.print_tb(err.__traceback__)
         print("  " + err.__repr__())
