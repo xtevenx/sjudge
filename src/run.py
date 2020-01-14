@@ -72,7 +72,7 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
     time_usage = time.time() - start_time
     memory_usage = process.memory_info().rss
 
-    while process.poll() is None:
+    while True:
         try:
             time_usage = time.time() - start_time
             memory_usage = max(memory_usage, process.memory_info().rss)
