@@ -72,15 +72,16 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
     time_usage = time.time() - start_time
     memory_usage = process.memory_info().rss
 
-    while True:
+    while process.poll() is None:
         try:
             time_usage = time.time() - start_time
             memory_usage = max(memory_usage, process.memory_info().rss)
+
+            if memory_usage > memory_limit or time_usage > time_limit:
+                process.kill()
+
         except psutil.NoSuchProcess:
             break
-
-        if memory_usage > memory_limit or time_usage > time_limit:
-            process.kill()
 
     return CompletedProcess(
         args,
