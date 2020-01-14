@@ -1,3 +1,8 @@
+"""
+This module contains a wrapper around `subprocess.run()` that provides
+various extra features enabled by `psutil`.
+"""
+
 import psutil
 import subprocess
 import time
@@ -7,6 +12,22 @@ import typing
 class CompletedProcess(subprocess.CompletedProcess):
     def __init__(self, *args, time_taken: float, timed_out: bool, max_memory: int,
                  memory_exceeded: bool, **kwargs):
+        """
+        This class is a descendant of `subprocess.CompletedProcess`.
+
+        :param args: arguments to pass to the parent.
+        :param time_taken: a float; the time (in seconds) it took to
+            run the program.
+        :param timed_out: a boolean; `True` if the program exceeded the
+            time limit and was killed.
+        :param max_memory: an integer; the memory (in bytes) it took to
+            run the program.
+        :param memory_exceeded: a boolean; `True` if the program
+            exceeded the memory limit and was killed memory limit and
+            was killed.
+        :param kwargs: keyword arguments to pass to the parent
+        """
+
         super().__init__(*args, **kwargs)
         self.time_usage: float = time_taken
         self.time_exceeded: bool = timed_out
@@ -16,6 +37,25 @@ class CompletedProcess(subprocess.CompletedProcess):
 
 def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit: float
         ) -> CompletedProcess:
+    """
+    Run command with arguments and return a `CompletedProcess`
+    instance.
+
+    This function is a wrapper around `subprocess.run()` and provides a
+    simplified interface and also measures the following metrics:
+      - time usage
+      - memory usage
+
+    :param args: the sequence of program arguments
+    :param stdin_string: the string to pass to the subprocess from
+        standard input.
+    :param memory_limit: an integer; the maximum memory (in bytes)
+        allowed for the program to utilize before killing it.
+    :param time_limit: a float; the maximum time (in seconds) allowed
+        for the program to utilize before killing it.
+    :return: a `CompletedProcess` instance.
+    """
+
     start_time = time.time()
 
     process = psutil.Popen(
@@ -36,11 +76,11 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
         try:
             time_usage = time.time() - start_time
             memory_usage = max(memory_usage, process.memory_info().rss)
-        except psutil.NoSuchProcess:
-            break
 
-        if memory_usage > memory_limit or time_usage > time_limit:
-            process.kill()
+            if memory_usage > memory_limit or time_usage > time_limit:
+                process.kill()
+
+        except psutil.NoSuchProcess:
             break
 
     return CompletedProcess(

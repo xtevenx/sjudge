@@ -1,5 +1,6 @@
 """
-This module manages the judging of a program.
+This module manages the judging of a program. The normal usage is with
+the `judge()` and `judge_one()` functions.
 """
 
 import shlex
@@ -12,11 +13,26 @@ from judges import default_judge
 import run
 import truncate
 
-# define types
+# The "input/output format" for the testing data is a list of strings.
+# Each string in the list represents a line of characters that is to be
+# passed to the tested program.
 IO_TYPE: typing.Type = typing.List[str]
+
+# A test case is represented by two IO_TYPE objects. The input and its
+# reference output.
 TESTCASE_TYPE: typing.Type = typing.Tuple[IO_TYPE, IO_TYPE]
+
+# A 'judge' is a function which takes in two IO_TYPE objects (the
+# program's output and the reference output) and returns `True` if the
+# program's output is deemed correct.
 JUDGE_TYPE: typing.Type = typing.Callable[[IO_TYPE, IO_TYPE], bool]
+
+# ANY_JUDGE represents anything that could be a judge: either a
+# JUDGE_TYPE function or a string, the name of a judge.
 ANY_JUDGE: typing.Type = typing.Union[str, JUDGE_TYPE]
+
+# A 'truncator' is a function that takes in an IO_TYPE object and
+# returns a truncated IO_TYPE object.
 TRUNCATOR_TYPE: typing.Type = typing.Callable[[IO_TYPE], IO_TYPE]
 
 # define judging verdicts
@@ -50,16 +66,23 @@ class TestcaseResult:
                  judge_func: ANY_JUDGE = "default"):
         """
         A class to keep track of a test case result.
-        :param exercise_input: input given by exercise
-        :param exercise_output: output given by exercise
-        :param program_stdout: the test program's output
-        :param program_stderr: the test program's errors
-        :param program_exitcode: the test program's exit code
-        :param program_time: the amount of time used by the test program
-        :param program_tle: whether the test program ran out of time
-        :param program_memory: the amount of memory used by the test program
-        :param program_mle: whether the test program ran out of memory
-        :param judge_func: the judging function
+
+        :param exercise_input: IO_TYPE; the input given by exercise.
+        :param exercise_output: IO_TYPE; the output given by exercise.
+        :param program_stdout: IO_TYPE; the test program's output.
+        :param program_stderr: IO_TYPE; the test program's errors.
+        :param program_exitcode: an integer; the test program's exit
+            code.
+        :param program_time: a float; the amount of time (in seconds)
+            used by the test program.
+        :param program_tle: a boolean; `True` if the test program
+            exceeded the time limit.
+        :param program_memory: an integer; the amount of memory (in
+            bytes) used by the test program.
+        :param program_mle: a boolean; `True` if the test program
+            exceeded the memory limit.
+        :param judge_func: ANY_JUDGE; a judging function or a string,
+            the name of a judging function.
         """
 
         self.exercise_input: IO_TYPE = exercise_input
@@ -81,8 +104,9 @@ class TestcaseResult:
 
     def _get_verdict(self) -> str:
         """
-        Get the result of this test based on initialization data.
-        :return: the judging verdict
+        Get the verdict of this test.
+
+        :return: a string; the judging verdict
         """
 
         if self.program_tle:
@@ -100,7 +124,9 @@ class JudgeResult:
     def __init__(self, test_results: typing.List[TestcaseResult] = ()) -> None:
         """
         A class to keep track of an entire set of tests.
-        :param test_results: test cases of which to keep track
+
+        :param test_results: a list of `TestcaseResult` instances; the
+            test cases of which to keep track.
         """
 
         self.testcases: typing.List[TestcaseResult] = []
@@ -128,8 +154,8 @@ class JudgeResult:
     def add_result(self, tc: TestcaseResult) -> None:
         """
         Add a test case to this set of tests.
-        :param tc: test case to add
-        :return: None
+
+        :param tc: a `TestcaseResult` instance; the test case to add.
         """
 
         self.testcases.append(tc)
@@ -146,19 +172,24 @@ class JudgeResult:
 
 def judge_program(program_command: str, testcases: typing.List[TESTCASE_TYPE],
                   exercise: str = "???", time_limit: float = 1.0, memory_limit: int = 256,
-                  judge: JUDGE_TYPE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
+                  judge: ANY_JUDGE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
                   ) -> JudgeResult:
     """
     Judge a program on a set of test cases.
-    :param program_command: command to run the program
-    :param testcases: list of inputs and respective outputs for all
-        the test cases.
-    :param exercise: name of the exercise
-    :param time_limit: time limit for the exercise
-    :param memory_limit: memory limit for the exercise
-    :param judge: judging function for the exercise
-    :param truncator: truncating function for the exercise
-    :return: list of results from every test case
+
+    :param program_command: a string; the command to run the program.
+    :param testcases: a list of `TESTCASE_TYPE`; the inputs and their
+        respective outputs for all the test cases.
+    :param exercise: a string; the name of the exercise.
+    :param time_limit: a float; the time limit for the exercise (in
+        seconds).
+    :param memory_limit: an integer; the memory limit for the exercise
+        (in mebibytes).
+    :param judge: ANY_JUDGE; a judging function or a string, the name
+        of a judging function, for the exercise.
+    :param truncator: TRUNCATOR_TYPE; the truncation function for the
+        exercise.
+    :return: a `JudgeResult` instance.
     """
 
     display.display(f"Running tests for exercise: {exercise}")
@@ -214,13 +245,17 @@ def judge_one(program_command: str, test_input: IO_TYPE, test_output: IO_TYPE,
               ) -> TestcaseResult:
     """
     Judge a program on a single test case.
-    :param program_command: command to run the program
-    :param test_input: input for the test case
-    :param test_output: output for the test case
-    :param time_limit: time limit for the test case
-    :param memory_limit: memory limit for the test case
-    :param judge: judging function for the exercise
-    :return: result of the test case
+
+    :param program_command: a string; the command to run the program.
+    :param test_input: IO_TYPE; the input for the test case.
+    :param test_output: IO_TYPE; the output for the test case
+    :param time_limit: a float; the time limit for the exercise (in
+        seconds).
+    :param memory_limit: an integer; the memory limit for the exercise
+        (in mebibytes).
+    :param judge: ANY_JUDGE; a judging function or a string, the name
+        of a judging function, for the exercise.
+    :return: a `TestcaseResult` instance.
     """
 
     process_return = run.run(
