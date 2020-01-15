@@ -39,4 +39,4 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - python3 tests/basic_test.py || python tests/basic_test.py
+  - py.test
