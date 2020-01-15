@@ -28,6 +28,24 @@ SPEC_FORMATTING: typing.Dict[str, str] = {
 }
 
 
+def exists(path: str, ex_name: str) -> bool:
+    """
+    Determine whether the exercise `ex_name` exists in the directory
+    `path`.
+
+    :param path: a string; the directory in which the supposed exercise
+        is located.
+    :param ex_name: a string; the name of the supposed exercise.
+    :return: a boolean; `True` if the exercise exists.
+    """
+
+    for file_ext in REQUIRED_FILES:
+        ex_path = os.path.join(path, f"{ex_name}.{file_ext}")
+        if not os.path.isfile(ex_path):
+            return False
+    return True
+
+
 def get_description(path: str, ex_name: str) -> str:
     """
     Get the exercise description of the exercise `ex_name` located in
@@ -39,6 +57,9 @@ def get_description(path: str, ex_name: str) -> str:
     :return: a string; the description (along with the specifications)
         of the exercise.
     """
+
+    if not exists(path, ex_name):
+        raise AssertionError(f"the exercise `{ex_name}` does not exist")
 
     return_str = ""
 
@@ -56,9 +77,6 @@ def get_description(path: str, ex_name: str) -> str:
     return_str += "\n"
 
     desc_path = os.path.join(path, f"{ex_name}.txt")
-    if not os.path.isfile(desc_path):
-        raise AssertionError(f"the exercise `{ex_name}` does not exist")
-
     with open(desc_path, "r") as fd:
         return_str += fd.read()
 
@@ -79,9 +97,10 @@ def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
             ex: {"judge": "default", "time_limit": 2.0, ... }
     """
 
-    desc_path: str = os.path.join(path, f"{ex_name}.json")
-    if not os.path.isfile(desc_path):
+    if not exists(path, ex_name):
         raise AssertionError(f"the exercise `{ex_name}` does not exist")
+
+    desc_path: str = os.path.join(path, f"{ex_name}.json")
 
     try:
         with open(desc_path, "r") as fd:
@@ -110,15 +129,6 @@ def list_exercises(path: str) -> typing.List[str]:
     if not os.path.isdir(path):
         raise AssertionError(f"the exercises location `{path}` is not a directory")
 
-    found_lessons: typing.List[str] = []
     all_names = frozenset(f.split(".")[0] for f in os.listdir(path))
 
-    for ex_name in all_names:
-        for file_ext in REQUIRED_FILES:
-            ex_path = os.path.join(path, f"{ex_name}.{file_ext}")
-            if not os.path.isfile(ex_path):
-                break
-        else:
-            found_lessons.append(ex_name)
-
-    return found_lessons
+    return [ex_name for ex_name in all_names if exists(path, ex_name)]
