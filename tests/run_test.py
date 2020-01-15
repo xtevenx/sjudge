@@ -33,8 +33,6 @@ def test__run():
     assert c.returncode != 0
     assert c.stdout == ""
     assert c.stderr == ""
-    assert c.time_usage <= tl
-    assert not c.time_exceeded
     assert c.memory_usage > ml
     assert c.memory_exceeded
 
