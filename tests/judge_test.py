@@ -29,7 +29,6 @@ def test__judge_program():
     assert r.passed == 0
     assert r.total == tc
     assert r.maximum_memory > ml
-    assert r.maximum_time <= tl
 
     c = get_command("tests/solutions/rte_tester.py")
     r = judge_program(c, [([""], [""]) for _ in range(tc)], )
