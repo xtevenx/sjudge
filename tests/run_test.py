@@ -14,7 +14,7 @@ MEBIBYTE = 1024 * 1024
 
 
 def test__run():
-    ml, tl = (256 * MEBIBYTE, 1)
+    ml, tl = (64 * MEBIBYTE, 6)
 
     a = shlex.split(get_command("tests/solutions/ac_tester.py"))
     c = run(a, "", memory_limit=ml, time_limit=tl)
@@ -33,6 +33,8 @@ def test__run():
     assert c.returncode != 0
     assert c.stdout == ""
     assert c.stderr == ""
+    assert c.time_usage <= tl
+    assert not c.time_exceeded
     assert c.memory_usage > ml
     assert c.memory_exceeded
 
