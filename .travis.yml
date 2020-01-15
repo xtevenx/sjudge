@@ -47,4 +47,7 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - pytest
+  - coverage run -m pytest
+
+after_success:
+  - coveralls
