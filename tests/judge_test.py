@@ -14,7 +14,7 @@ MEBIBYTE = 1024 * 1024
 
 
 def test__judge_program():
-    ml, tl, tc = (32, 6, 10)
+    ml, tl, tc = (32, 6, 5)
 
     c = get_command("tests/solutions/ac_tester.py")
     r = judge_program(c, [([""], [""]) for _ in range(tc)], time_limit=tl, memory_limit=ml)
