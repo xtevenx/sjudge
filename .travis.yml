@@ -3,6 +3,14 @@ os: linux
 
 jobs:
   include:
+#    - name: "Python 3.7.6 on macOS"
+#      os: osx
+#      language: generic
+#      python: "3.7.6"
+#    - name: "Python 3.8.1 on macOS"
+#      os: osx
+#      language: generic
+#      python: "3.8.1"
     - name: "Python 3.7.6 on Xenial Linux"
       os: linux
       dist: xenial
@@ -39,4 +47,7 @@ install:
   - pip3 install -r requirements.txt
 
 script:
-  - python3 tests/basic_test.py || python tests/basic_test.py
+  - coverage run -m pytest
+
+after_success:
+  - coveralls

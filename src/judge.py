@@ -73,8 +73,8 @@ class TestcaseResult:
         :param program_stderr: IO_TYPE; the test program's errors.
         :param program_exitcode: an integer; the test program's exit
             code.
-        :param program_time: a float; the amount of time (in seconds)
-            used by the test program.
+        :param program_time: a float; the amount of time (in
+            milliseconds) used by the test program.
         :param program_tle: a boolean; `True` if the test program
             exceeded the time limit.
         :param program_memory: an integer; the amount of memory (in

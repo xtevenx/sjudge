@@ -33,7 +33,7 @@ def truncate(s: typing.List[str], char_limit: typing.Optional[int] = None,
     nl_limit = INFINITY if nl_limit is None else nl_limit
 
     return_s: typing.List[str] = []
-    for line in s:
+    for i, line in enumerate(s):
         if len(line) > char_limit:
             return_s.append(line[:char_limit])
             return_s.append(TRUNCATED_STRING)
@@ -45,5 +45,9 @@ def truncate(s: typing.List[str], char_limit: typing.Optional[int] = None,
         return_s.append(line)
         char_limit -= len(line)
         nl_limit -= 1
+
+        if not char_limit and i + 1 < len(s):
+            return_s.append(TRUNCATED_STRING)
+            break
 
     return return_s
