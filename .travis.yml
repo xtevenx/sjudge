@@ -3,6 +3,14 @@ os: linux
 
 jobs:
   include:
+    - name: "Python 3.7 on macOS"
+      os: osx
+      language: generic
+      env: PYVER=37
+    - name: "Python 3.8 on macOS"
+      os: osx
+      language: generic
+      env: PYVER=38
     - name: "Python 3.7.6 on Xenial Linux"
       os: linux
       dist: xenial
