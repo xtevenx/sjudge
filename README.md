@@ -1,7 +1,7 @@
 sjudge
 ======
 
-[![Build Status](https://img.shields.io/travis/com/steven-xia/sjudge?logo=travis)](https://travis-ci.com/steven-xia/sjudge)
+[![Travis (.com) branch](https://img.shields.io/travis/com/steven-xia/sjudge/master?logo=travis)](https://travis-ci.com/steven-xia/sjudge)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/steven-xia/sjudge.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/steven-xia/sjudge/context:python)
 [![Code Size](https://img.shields.io/github/languages/code-size/steven-xia/sjudge)](https://github.com/steven-xia/sjudge)
 [![Dependencies](https://img.shields.io/librariesio/github/steven-xia/sjudge?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge/blob/master/requirements.txt)
