@@ -44,7 +44,9 @@ def test__exists():
 
 def test__get_description():
     assert get_description("tests/exercises/", "test0") == DEFAULT_DESCRIPTION.format(e="test0")
-    assert get_description("tests/exercises/", "test1") == DEFAULT_DESCRIPTION.format(e="test1")
+
+    with pytest.raises(AssertionError):
+        get_description("tests/exercises/", "test1")
 
     with pytest.raises(AssertionError):
         get_description("tests/exercises/", "test2")
@@ -70,9 +72,8 @@ def test__get_specs():
     d["exercise"] = "test0"
     assert get_specs("tests/exercises/", "test0") == d
 
-    d = copy.deepcopy(DEFAULT_SPECS)
-    d["exercise"] = "test1"
-    assert get_specs("tests/exercises/", "test1") == d
+    with pytest.raises(AssertionError):
+        get_description("tests/exercises/", "test1")
 
     with pytest.raises(AssertionError):
         get_specs("tests/exercises/", "test2")
