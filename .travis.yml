@@ -19,6 +19,10 @@ jobs:
       os: linux
       dist: xenial
       python: "3.8.1"
+    - name: "Python 'nightly' on Xenial Linux"
+      os: linux
+      dist: xenial
+      python: "nightly"
     - name: "Python 3.7.6 on Bionic Linux"
       os: linux
       dist: bionic
@@ -27,6 +31,10 @@ jobs:
       os: linux
       dist: bionic
       python: "3.8.1"
+    - name: "Python 'nightly' on Bionic Linux"
+      os: linux
+      dist: bionic
+      python: "nightly"
     - name: "Python 3.7.6 on Windows"
       os: windows
       language: shell
