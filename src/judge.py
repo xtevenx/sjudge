@@ -129,10 +129,6 @@ class JudgeResult:
             test cases of which to keep track.
         """
 
-        self.testcases: typing.List[TestcaseResult] = []
-        for tc in test_results:
-            self.add_result(tc)
-
         self.passed: int = 0
         self.total: int = 0
 
@@ -141,6 +137,10 @@ class JudgeResult:
 
         self.verdict: str = ANSWER_CORRECT
 
+        self.testcases: typing.List[TestcaseResult] = []
+        for tc in test_results:
+            self.add_result(tc)
+
     def __add__(self, other: TestcaseResult) -> "JudgeResult":
         self.add_result(other)
         return self
@@ -148,7 +148,7 @@ class JudgeResult:
     def __getitem__(self, item: int) -> TestcaseResult:
         return self.testcases[item]
 
-    def __iter__(self) -> iter:
+    def __iter__(self) -> typing.Iterable[TestcaseResult]:
         return iter(self.testcases)
 
     def add_result(self, tc: TestcaseResult) -> None:

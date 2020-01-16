@@ -7,10 +7,22 @@ source_dir = os.path.join(parent_dir, "src/")
 sys.path.append(source_dir)
 
 import judge
+from judge import JudgeResult
 from judge import judge_program
 from command import get_command
 
 MEBIBYTE = 1024 * 1024
+
+
+def test__JudgeResult():
+    c = get_command("tests/solutions/ac_tester.py")
+    r = judge_program(c, [([""], [""]) for _ in range(10)], time_limit=2, memory_limit=256)
+
+    r_copy = JudgeResult(r.testcases)
+    for i, c in enumerate(r_copy):
+        assert r[i].verdict == c.verdict
+        assert r[i].program_time == c.program_time
+        assert r[i].program_memory == c.program_memory
 
 
 def test__judge_program():
