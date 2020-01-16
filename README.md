@@ -30,29 +30,19 @@ When (and why) I should use `sjudge`
 However, contrary to most other judges, `sjudge` is locally run which results in a simpler design.
 Along with it also comes with a set of advantages and disadvantages:
 
-Advantages:
-
-*   Simple design for easy configurability.
-*   No fear of students trying to undermine your machine.
-
-Disadvantages:
-
-*   Programs' performance is affected by machine usage.
-*   Smart students can technically access the test cases.
+| Advantages                                            | Disadvantages                                                 |
+| ------------------------------------------------------|---------------------------------------------------------------|
+| Simple design for easy configurability.               | A program's performance will vary depending on the computer.  |
+| No fear of students trying to undermine your machine. | The test cases are viewable by the students.                  |
 
 Supported Platforms
 -------------------
 
-Operating systems:
-
-*   Ubuntu 16.04 LTS (Xenial Xerus)
-*   Ubuntu 18.04 LTS (Bionic Beaver)
-*   Windows 10
-
-Python versions:
-
-*   Python 3.7.x
-*   Python 3.8.x
+| Operating Systems                 | Python Versions   |
+| ----------------------------------|-------------------|
+| Ubuntu 16.04 LTS (Xenial Xerus)   | Python 3.7.x      |
+| Ubuntu 18.04 LTS (Bionic Beaver)  | Python 3.8.x      |
+| Windows 10                        |                   |
 
 Setup
 -----
@@ -71,7 +61,7 @@ pip3 install -r requirements.txt
 Edit `DEFAULT_EXERCISES` in `src/main.py` to point to the full path of that directory.
 
 To have the students run `sjudge`, place it in a directory to which they have read access (usually `/usr/local/sbin/` on linux) and instruct them to add it to their `PATH` (if needed).
-If hiding the location of the exercises is desired, you can compile `sjudge` into and executable with `pyinstaller`.
+If hiding the location of the exercises is desired, you can compile `sjudge` into an executable with `pyinstaller`.
 
 ### Adding exercises
 
