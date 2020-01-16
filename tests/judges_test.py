@@ -55,6 +55,13 @@ def test__float_judge():
     assert not float_judge(["123.04"], ["123"], precision=2)
     assert not float_judge(["1.23", "2.72", "3.14159265358"], ["1.234", "2.71848", "3.14"], precision=3)
 
+    assert float_judge(["1.23 2.72 3.14159265358"], ["1.234 2.71848 3.14"], precision=2)
+    assert not float_judge(["1.23 2.72 3.14159265358"], ["1.234 2.71848 3.14"], precision=3)
+    assert not float_judge(["1.23 2.72 3.14159265358"], ["1.234 2.71848"], precision=2)
+    assert not float_judge(["1.23 2.72"], ["1.234 2.71848 3.14"], precision=3)
+    assert not float_judge(["1.test 2.72 3.14159265358"], ["1.234 2.71848 3.14"], precision=2)
+    assert not float_judge(["1.23 test test_again"], ["1.234 2.71848 3.14"], precision=3)
+
 
 def test__identical_judge():
     assert identical_judge([], [])
