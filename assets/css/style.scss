@@ -11,11 +11,11 @@ body {
 
 img {
   opacity: 0.85;
+  transition: 0.2s;
 }
 
 img:hover {
   opacity: 1;
-  transition: 0.2s;
 }
 
 .page-header {
