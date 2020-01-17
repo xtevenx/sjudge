@@ -27,9 +27,18 @@ body {
   background-color: #5c6370;
 }
 
+.main-content code {
+  color: #98c379;
+  background-color: #282c34;
+}
+
 .main-content pre > code {
   color: #98c379;
   background-color: #282c34;
+}
+
+.language-bash {
+  background: #1e2127;
 }
 
 .highlight .nb {
