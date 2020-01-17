@@ -10,7 +10,12 @@ body {
 }
 
 img {
-  opacity: 0.9;
+  opacity: 0.85;
+}
+
+img:hover {
+  opacity: 1;
+  transition: 0.2s;
 }
 
 .page-header {
