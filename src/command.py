@@ -13,8 +13,9 @@ WINDOWS: str = "Windows"
 # respective commands for running:
 #     {extensions: (unix_command, windows_command)}
 LANGUAGES: typing.Dict[frozenset, typing.Tuple[str, str]] = {
-    frozenset({"py", "pyc"}): ("python3 {}", "python {}"),
     frozenset({"jar"}): ("java -jar {}",) * 2,
+    frozenset({"js"}): ("node {}",) * 2,
+    frozenset({"py", "pyc"}): ("python3 {}", "python {}"),
 }
 
 # default command to run a file
