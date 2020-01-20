@@ -60,10 +60,10 @@ MILLISECOND: int = 1000
 class TestcaseResult:
     def __init__(self,
                  exercise_input: IO_TYPE, exercise_output: IO_TYPE,
-                 program_stdout: IO_TYPE, program_stderr: IO_TYPE, program_exitcode: int = False,
+                 program_stdout: IO_TYPE, program_stderr: IO_TYPE, program_exitcode: int,
+                 verdict: str = ANSWER_CORRECT,
                  program_time: float = 0, program_tle: bool = False,
-                 program_memory: int = 0, program_mle: bool = False,
-                 judge_func: ANY_JUDGE = "default"):
+                 program_memory: int = 0, program_mle: bool = False):
         """
         A class to keep track of a test case result.
 
@@ -73,6 +73,7 @@ class TestcaseResult:
         :param program_stderr: IO_TYPE; the test program's errors.
         :param program_exitcode: an integer; the test program's exit
             code.
+        :param verdict: a string; the result of the judging.
         :param program_time: a float; the amount of time (in
             milliseconds) used by the test program.
         :param program_tle: a boolean; `True` if the test program
@@ -81,8 +82,6 @@ class TestcaseResult:
             bytes) used by the test program.
         :param program_mle: a boolean; `True` if the test program
             exceeded the memory limit.
-        :param judge_func: ANY_JUDGE; a judging function or a string,
-            the name of a judging function.
         """
 
         self.exercise_input: IO_TYPE = exercise_input
@@ -95,29 +94,8 @@ class TestcaseResult:
         self.program_memory: int = program_memory
         self.program_mle: bool = program_mle
 
-        if isinstance(judge_func, str):
-            judge_func = JUDGES[judge_func]
-        self.judge_func: JUDGE_TYPE = judge_func
-
-        self.verdict: str = self._get_verdict()
+        self.verdict: str = verdict
         self.passed: bool = self.verdict == ANSWER_CORRECT
-
-    def _get_verdict(self) -> str:
-        """
-        Get the verdict of this test.
-
-        :return: a string; the judging verdict
-        """
-
-        if self.program_tle:
-            return TIME_LIMIT_EXCEEDED
-        elif self.program_mle:
-            return MEM_LIMIT_EXCEEDED
-        elif self.program_exitcode:
-            return RUNTIME_ERROR
-        else:
-            judge_result = self.judge_func(self.program_stdout, self.exercise_output)
-            return ANSWER_CORRECT if judge_result else WRONG_ANSWER
 
 
 class JudgeResult:
@@ -216,7 +194,9 @@ def judge_program(program_command: str, testcases: typing.List[TESTCASE_TYPE],
             display.display("  Error Message:")
             display.display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.program_stderr)))
             display.display("  Exit code:")
-            display.display("  ⮡ Process finished with exit code {}".format(this_result.program_exitcode))
+            display.display("  ⮡ Process finished with exit code {}".format(
+                this_result.program_exitcode
+            ))
 
         elif this_result.verdict == WRONG_ANSWER:
             display.display("  Expected output:")
@@ -269,13 +249,26 @@ def judge_one(program_command: str, test_input: IO_TYPE, test_output: IO_TYPE,
     process_errors = _decode_io(process_return.stderr)
     process_exitcode = process_return.returncode
 
+    if process_return.time_exceeded:
+        judge_verdict = TIME_LIMIT_EXCEEDED
+    elif process_return.memory_exceeded:
+        judge_verdict = MEM_LIMIT_EXCEEDED
+    elif process_exitcode:
+        judge_verdict = RUNTIME_ERROR
+    else:
+        if isinstance(judge, str):
+            judge = JUDGES[judge]
+
+        judge_result = judge(process_output, test_output)
+        judge_verdict = ANSWER_CORRECT if judge_result else WRONG_ANSWER
+
     return TestcaseResult(
         test_input, test_output, process_output, process_errors, process_exitcode,
+        verdict=judge_verdict,
         program_time=MILLISECOND * process_return.time_usage,
         program_tle=process_return.time_exceeded,
         program_memory=process_return.memory_usage,
         program_mle=process_return.memory_exceeded,
-        judge_func=judge
     )
 
 
