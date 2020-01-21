@@ -7,9 +7,15 @@ source_dir = os.path.join(parent_dir, "src/")
 sys.path.append(source_dir)
 
 import platform
+from command import _exists
 from command import get_command
 
 WINDOWS = "Windows"
+
+
+def test___exists():
+    assert _exists("python" if platform.system() == WINDOWS else "python3") is True
+    assert _exists("testtesttest") is False
 
 
 def test__get_command():
