@@ -58,13 +58,17 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
 
     start_time = time.time()
 
-    process = psutil.Popen(
-        args,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True
-    )
+    try:
+        process = psutil.Popen(
+            args,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True
+        )
+    except FileNotFoundError as err:
+        msg: str = err.args[1]
+        raise AssertionError(msg[:1].lower() + msg[1:])
 
     process.stdin.write(stdin_string)
     process.stdin.flush()
