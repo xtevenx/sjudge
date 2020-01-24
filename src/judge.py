@@ -188,7 +188,7 @@ def judge_program(program_command: str, testcases: typing.List[TESTCASE_TYPE],
             this_result.verdict,
             this_result.program_time,
             this_result.program_memory / MEBIBYTE
-        ))
+        ), v=display.RESULT_ONLY)
 
         if this_result.verdict == RUNTIME_ERROR:
             display.display("  Error Message:")
@@ -215,7 +215,7 @@ def judge_program(program_command: str, testcases: typing.List[TESTCASE_TYPE],
 
     display.display("Final score: {}/{}  [{}]".format(
         result_tracker.passed, result_tracker.total, details
-    ))
+    ), v=display.SUMMARY_ONLY)
 
     return result_tracker
 
