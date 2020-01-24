@@ -6,7 +6,9 @@ parent_dir = os.path.dirname(current_dir)
 source_dir = os.path.join(parent_dir, "src/")
 sys.path.append(source_dir)
 
+import pytest
 import shlex
+
 from run import run
 from command import get_command
 
@@ -70,3 +72,6 @@ def test__run():
     assert not c.time_exceeded
     assert c.memory_usage <= ml
     assert not c.memory_exceeded
+
+    with pytest.raises(AssertionError):
+        run(["testtesttest"], "", memory_limit=ml, time_limit=tl)
