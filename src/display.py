@@ -14,9 +14,9 @@ SIMPLE_CHARACTERS: typing.Dict[str, str] = {
 }
 
 # global variables to set the program's level of verbosity
-ALL: int = 2
+ALL: int = 0
 RESULT_ONLY: int = 1
-SUMMARY_ONLY: int = 0
+SUMMARY_ONLY: int = 2
 _VERBOSITY: int = ALL
 
 
@@ -29,7 +29,7 @@ def display(s: str = "", v: int = ALL) -> None:
     :param v: an integer; the level of verbosity of the message.
     """
 
-    if _VERBOSITY < v:
+    if _VERBOSITY > v:
         return
 
     try:
