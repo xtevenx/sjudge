@@ -3,4 +3,3 @@ source = src/
 omit =
     src/exercises/*
     src/solutions/*
-    src/main.py

@@ -35,6 +35,14 @@ Along with it also comes with a set of advantages and disadvantages:
 | Simple design for easy configurability.               | A program's performance will vary depending on the computer.  |
 | No fear of students trying to undermine your machine. | The test cases are viewable by the students.                  |
 
+### `sjudge` as a backend
+
+Another method of utilizing `sjudge` is to use it to mark tests.
+For example, one could pose a set of problems to the students, save their solutions, then run `sjudge` with a script to 
+determine the results of the test.
+One downside of this method is that students' solutions would need to be run on your machine, however, that can be 
+easily overcome by creating a new user with no special permissions with which to run the marking script.
+
 Supported Platforms
 -------------------
 
