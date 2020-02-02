@@ -8,8 +8,6 @@ import subprocess
 import time
 import typing
 
-_LOCALHOST_IP = "127.0.0.1"
-
 
 class CompletedProcess(subprocess.CompletedProcess):
     def __init__(self, *args, time_taken: float, timed_out: bool, max_memory: int,
@@ -91,8 +89,7 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
             # PIDs. this is required instead of simply using
             # `process.connections()` because `process.connections()`
             # requires root access on linux based operating systems.
-            p_connections = (c for c in psutil.net_connections("all") if c.pid == process.pid)
-            if any(map(_illegal_connection, p_connections)):
+            if [c for c in psutil.net_connections("all") if c.pid == process.pid]:
                 process.kill()
 
         except psutil.NoSuchProcess:
@@ -108,18 +105,3 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
         stdout=process.stdout.read(),
         stderr=process.stderr.read()
     )
-
-
-def _illegal_connection(c) -> bool:
-    """
-    Determine whether a network connection is allowed to be kept open.
-    A connection is only allowed if it connects back to the local
-    machine; any other connections are 'illegal'.
-
-    :param c: one of the return of `Process.connections()`, a named
-        tuple of connection attributes; the connection data from which
-        to determine whether or not it is 'illegal'.
-    :return: a boolean; whether the connection is allowed.
-    """
-
-    return c.raddr != () and c.raddr.ip != _LOCALHOST_IP
