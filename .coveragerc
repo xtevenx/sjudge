@@ -1,5 +1,0 @@
-[run]
-source = src/
-omit =
-    src/exercises/*
-    src/solutions/*
