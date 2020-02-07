@@ -85,4 +85,4 @@ The new exercise name should now be listed when you run `python3 main.py --list_
 License
 -------
 
-`sjudge` is licensed under the [GNU General Public License v3.0](https://github.com/steven-xia/sjudge/blob/master/LICENSE).
+`sjudge` is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html).
