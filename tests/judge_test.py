@@ -6,6 +6,8 @@ parent_dir = os.path.dirname(current_dir)
 source_dir = os.path.join(parent_dir, "src/")
 sys.path.append(source_dir)
 
+import pytest
+
 import judge
 from judge import JudgeResult
 from judge import judge_program
@@ -67,18 +69,10 @@ def test__judge_program():
     assert r.maximum_memory <= MEBIBYTE * ml
     assert r.maximum_time <= 1000 * tl
 
-    c = get_command("tests/solutions/connections_tester.py")
-    r = judge_program(c, [([""], [""]) for _ in range(tc)], time_limit=tl, memory_limit=ml)
-    assert r.verdict == judge.RUNTIME_ERROR
-    assert r.passed == 0
-    assert r.total == tc
-    assert r.maximum_memory <= MEBIBYTE * ml
-    assert r.maximum_time <= 1000 * tl
+    with pytest.raises(AssertionError):
+        c = get_command("tests/solutions/childprocess_tester.py")
+        judge_program(c, [([""], [""]) for _ in range(tc)], time_limit=tl, memory_limit=ml)
 
-    c = get_command("tests/solutions/childprocess_tester.py")
-    r = judge_program(c, [([""], [""]) for _ in range(tc)], time_limit=tl, memory_limit=ml)
-    assert r.verdict == judge.RUNTIME_ERROR
-    assert r.passed == 0
-    assert r.total == tc
-    assert r.maximum_memory <= MEBIBYTE * ml
-    assert r.maximum_time <= 1000 * tl
+    with pytest.raises(AssertionError):
+        c = get_command("tests/solutions/connections_tester.py")
+        judge_program(c, [([""], [""]) for _ in range(tc)], time_limit=tl, memory_limit=ml)

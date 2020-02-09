@@ -76,10 +76,10 @@ def test__run():
     with pytest.raises(AssertionError):
         run(["testtesttest"], "", memory_limit=ml, time_limit=tl)
 
-    a = shlex.split(get_command("tests/solutions/connections_tester.py"))
-    c = run(a, "", memory_limit=ml, time_limit=tl)
-    assert c.returncode != 0
+    with pytest.raises(AssertionError):
+        a = shlex.split(get_command("tests/solutions/childprocess_tester.py"))
+        run(a, "", memory_limit=ml, time_limit=tl)
 
-    a = shlex.split(get_command("tests/solutions/childprocess_tester.py"))
-    c = run(a, "", memory_limit=ml, time_limit=tl)
-    assert c.returncode != 0
+    with pytest.raises(AssertionError):
+        a = shlex.split(get_command("tests/solutions/connections_tester.py"))
+        run(a, "", memory_limit=ml, time_limit=tl)
