@@ -84,6 +84,9 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
             if memory_usage > memory_limit or time_usage > time_limit:
                 process.kill()
 
+            if process.children():
+                process.kill()
+
             # retrieve all the connections on the machine, then filter
             # for the ones open by the current process by comparing
             # PIDs. this is required instead of simply using
