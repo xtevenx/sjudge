@@ -89,15 +89,8 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
 
                 # `psutil.Process()` defaults to the process that it
                 # is called from (in this case the judging script).
-                judge_process = psutil.Process()
-
-                # note: convert next two lines to use walrus operator
-                # when Python 3.7 support is dropped.
-                children = judge_process.children(recursive=True)
-                while children:
-                    for c in children:
-                        c.kill()
-                    children = judge_process.children(recursive=True)
+                for c in psutil.Process().children(recursive=True):
+                    c.kill()
 
             # retrieve all the connections on the machine, then filter
             # for the ones open by the current process by comparing
