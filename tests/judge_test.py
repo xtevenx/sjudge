@@ -74,3 +74,11 @@ def test__judge_program():
     assert r.total == tc
     assert r.maximum_memory <= MEBIBYTE * ml
     assert r.maximum_time <= 1000 * tl
+
+    c = get_command("tests/solutions/childprocess_tester.py")
+    r = judge_program(c, [([""], [""]) for _ in range(tc)], time_limit=tl, memory_limit=ml)
+    assert r.verdict == judge.RUNTIME_ERROR
+    assert r.passed == 0
+    assert r.total == tc
+    assert r.maximum_memory <= MEBIBYTE * ml
+    assert r.maximum_time <= 1000 * tl

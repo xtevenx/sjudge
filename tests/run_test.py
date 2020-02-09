@@ -79,3 +79,7 @@ def test__run():
     a = shlex.split(get_command("tests/solutions/connections_tester.py"))
     c = run(a, "", memory_limit=ml, time_limit=tl)
     assert c.returncode != 0
+
+    a = shlex.split(get_command("tests/solutions/childprocess_tester.py"))
+    c = run(a, "", memory_limit=ml, time_limit=tl)
+    assert c.returncode != 0
