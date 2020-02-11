@@ -84,6 +84,16 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
             if memory_usage > memory_limit or time_usage > time_limit:
                 process.kill()
 
+            if process.children():
+                process.kill()
+
+                # `psutil.Process()` defaults to the process that it
+                # is called from (in this case the judging script).
+                for c in psutil.Process().children(recursive=True):
+                    c.kill()
+
+                raise AssertionError("the test program attempted to start a child process")
+
             # retrieve all the connections on the machine, then filter
             # for the ones open by the current process by comparing
             # PIDs. this is required instead of simply using
@@ -91,6 +101,9 @@ def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit
             # requires root access on linux based operating systems.
             if [c for c in psutil.net_connections("all") if c.pid == process.pid]:
                 process.kill()
+
+                raise AssertionError(
+                    "the test program attempted to communicate through the network")
 
         except psutil.NoSuchProcess:
             break
