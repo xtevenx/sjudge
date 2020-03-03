@@ -5,23 +5,21 @@ the program's output to be exactly the reference output; it checks if
 it is numerically close enough to the reference output.
 """
 
-import typing
+from typing import Sequence
 
 
-def float_judge(program_output: typing.List[str], expected_output: typing.List[str],
-                precision: int = 8) -> bool:
+def float_judge(program_output: Sequence[str], expected_output: Sequence[str], precision: int = 8
+                ) -> bool:
     """
     Judge a program's output based on the 'float' judge.
 
-    :param program_output: a sequence of strings; the program's output.
-    :param expected_output: a sequence of strings; the reference
-        output.
-    :param precision: an integer; the number of decimals to count
-        before the rest is considered noise. For example, if the
-        precision is 2 and the reference output is "3.14", then
-        "3.138" and "3.141 would be correct but "3.132" and "3.147"
-        would be incorrect.
-    :return: a boolean; `True` if the program's output is correct.
+    :param program_output: the program's output.
+    :param expected_output: the reference output.
+    :param precision: the number of decimals to count before the rest
+        is considered noise. For example, if the precision is 2 and the
+        reference output is "3.14", then "3.138" and "3.141 would be
+        correct but "3.132" and "3.147" would be incorrect.
+    :return: `True` if the program's output is correct.
     """
 
     if len(program_output) != len(expected_output):
