@@ -1,6 +1,5 @@
-import sys
+from sys import stdin, stdout
 
-x = int(sys.stdin.readline()[:-1])
-y = int(sys.stdin.readline()[:-1])
-
-print(x // y)
+x = int(stdin.readline()[:-1])
+y = int(stdin.readline()[:-1])
+stdout.write(f"{x // y}\n")
