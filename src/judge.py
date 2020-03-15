@@ -6,7 +6,7 @@ the `judge()` and `judge_one()` functions.
 import shlex
 
 from typing import (
-    Callable, Dict, Iterable, List, Tuple, Type, Union
+    Callable, Dict, Iterable, List, Sequence, Tuple, Type, Union
 )
 
 import display
@@ -102,12 +102,12 @@ class TestcaseResult:
 
 
 class JudgeResult:
-    def __init__(self, test_results: List[TestcaseResult] = ()) -> None:
+    def __init__(self, test_results: Sequence[TestcaseResult] = ()) -> None:
         """
         A class to keep track of an entire set of tests.
 
-        :param test_results: a list of `TestcaseResult` instances; the
-            test cases of which to keep track.
+        :param test_results: a sequence of `TestcaseResult` instances;
+            the test cases of which to keep track.
         """
 
         self.passed: int = 0
@@ -151,15 +151,15 @@ class JudgeResult:
             self.verdict = tc.verdict
 
 
-def judge_program(program_command: str, testcases: List[TESTCASE_TYPE], exercise: str = "???",
+def judge_program(program_command: str, testcases: Sequence[TESTCASE_TYPE], exercise: str = "???",
                   time_limit: float = 1.0, memory_limit: int = 256, judge: ANY_JUDGE = "default",
                   truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR) -> JudgeResult:
     """
     Judge a program on a set of test cases.
 
     :param program_command: a string; the command to run the program.
-    :param testcases: a list of `TESTCASE_TYPE`; the inputs and their
-        respective outputs for all the test cases.
+    :param testcases: a sequence of `TESTCASE_TYPE`; the inputs and
+        their respective outputs for all the test cases.
     :param exercise: a string; the name of the exercise.
     :param time_limit: a float; the time limit for the exercise (in
         seconds).
