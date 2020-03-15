@@ -6,7 +6,8 @@ based on the its extension.
 import platform
 import shlex
 import subprocess
-import typing
+
+from typing import Dict, Tuple
 
 # the result of `platform.system()` on Windows 10
 WINDOWS: str = "Windows"
@@ -14,7 +15,7 @@ WINDOWS: str = "Windows"
 # a dictionary with supported programming languages and their
 # respective commands for running:
 #     {extensions: (unix_command, windows_command)}
-LANGUAGES: typing.Dict[frozenset, typing.Tuple[str, str]] = {
+LANGUAGES: Dict[frozenset, Tuple[str, str]] = {
     frozenset({"jar"}): ("java -jar {}",) * 2,
     frozenset({"js"}): ("node {}",) * 2,
     frozenset({"py", "pyc"}): ("python3 {}", "python {}"),

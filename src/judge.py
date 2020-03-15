@@ -4,7 +4,10 @@ the `judge()` and `judge_one()` functions.
 """
 
 import shlex
-import typing
+
+from typing import (
+    Callable, Dict, Iterable, List, Tuple, Type, Union
+)
 
 import display
 from judges import float_judge
@@ -16,24 +19,24 @@ import truncate
 # The "input/output format" for the testing data is a list of strings.
 # Each string in the list represents a line of characters that is to be
 # passed to the tested program.
-IO_TYPE: typing.Type = typing.List[str]
+IO_TYPE: Type = List[str]
 
 # A test case is represented by two IO_TYPE objects. The input and its
 # reference output.
-TESTCASE_TYPE: typing.Type = typing.Tuple[IO_TYPE, IO_TYPE]
+TESTCASE_TYPE: Type = Tuple[IO_TYPE, IO_TYPE]
 
 # A 'judge' is a function which takes in two IO_TYPE objects (the
 # program's output and the reference output) and returns `True` if the
 # program's output is deemed correct.
-JUDGE_TYPE: typing.Type = typing.Callable[[IO_TYPE, IO_TYPE], bool]
+JUDGE_TYPE: Type = Callable[[IO_TYPE, IO_TYPE], bool]
 
 # ANY_JUDGE represents anything that could be a judge: either a
 # JUDGE_TYPE function or a string, the name of a judge.
-ANY_JUDGE: typing.Type = typing.Union[str, JUDGE_TYPE]
+ANY_JUDGE: Type = Union[str, JUDGE_TYPE]
 
 # A 'truncator' is a function that takes in an IO_TYPE object and
 # returns a truncated IO_TYPE object.
-TRUNCATOR_TYPE: typing.Type = typing.Callable[[IO_TYPE], IO_TYPE]
+TRUNCATOR_TYPE: Type = Callable[[IO_TYPE], IO_TYPE]
 
 # define judging verdicts
 ANSWER_CORRECT: str = "Answer Correct"
@@ -43,7 +46,7 @@ MEM_LIMIT_EXCEEDED: str = "Memory Limit Exceeded"
 WRONG_ANSWER: str = "Wrong Answer"
 
 # define judging functions
-JUDGES: typing.Dict[str, JUDGE_TYPE] = {
+JUDGES: Dict[str, JUDGE_TYPE] = {
     "float": float_judge.float_judge,
     "identical": identical_judge.identical_judge,
     "default": default_judge.default_judge
@@ -99,7 +102,7 @@ class TestcaseResult:
 
 
 class JudgeResult:
-    def __init__(self, test_results: typing.List[TestcaseResult] = ()) -> None:
+    def __init__(self, test_results: List[TestcaseResult] = ()) -> None:
         """
         A class to keep track of an entire set of tests.
 
@@ -115,7 +118,7 @@ class JudgeResult:
 
         self.verdict: str = ANSWER_CORRECT
 
-        self.testcases: typing.List[TestcaseResult] = []
+        self.testcases: List[TestcaseResult] = []
         for tc in test_results:
             self.add_result(tc)
 
@@ -126,7 +129,7 @@ class JudgeResult:
     def __getitem__(self, item: int) -> TestcaseResult:
         return self.testcases[item]
 
-    def __iter__(self) -> typing.Iterable[TestcaseResult]:
+    def __iter__(self) -> Iterable[TestcaseResult]:
         return iter(self.testcases)
 
     def add_result(self, tc: TestcaseResult) -> None:
@@ -148,10 +151,9 @@ class JudgeResult:
             self.verdict = tc.verdict
 
 
-def judge_program(program_command: str, testcases: typing.List[TESTCASE_TYPE],
-                  exercise: str = "???", time_limit: float = 1.0, memory_limit: int = 256,
-                  judge: ANY_JUDGE = "default", truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
-                  ) -> JudgeResult:
+def judge_program(program_command: str, testcases: List[TESTCASE_TYPE], exercise: str = "???",
+                  time_limit: float = 1.0, memory_limit: int = 256, judge: ANY_JUDGE = "default",
+                  truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR) -> JudgeResult:
     """
     Judge a program on a set of test cases.
 

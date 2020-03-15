@@ -4,17 +4,19 @@ This module manages the loading of exercise related information.
 
 import json
 import os
+
 import typing
+from typing import Dict, List
 
-SPEC_TYPE: typing.Type = typing.Dict[str, typing.Any]
+SPEC_TYPE: typing.Type = Dict[str, typing.Any]
 
-REQUIRED_FILES: typing.List[str] = [
+REQUIRED_FILES: List[str] = [
     "json",  # exercise specifications
     "py",  # test case generation
     "txt",  # exercise description
 ]
 
-REQUIRED_SPECS: typing.List[str] = [
+REQUIRED_SPECS: List[str] = [
     "exercise",
     "judge",
     "time_limit",
@@ -22,7 +24,7 @@ REQUIRED_SPECS: typing.List[str] = [
     "testcases",
 ]
 
-SPEC_FORMATTING: typing.Dict[str, str] = {
+SPEC_FORMATTING: Dict[str, str] = {
     "time_limit": "{key}: {value} s",
     "memory_limit": "{key}: {value} MiB",
 }
@@ -116,7 +118,7 @@ def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
         raise AssertionError(f"the file `{desc_path}` is corrupt; please generate it again")
 
 
-def list_exercises(path: str) -> typing.List[str]:
+def list_exercises(path: str) -> List[str]:
     """
     Get the names of all the exercises found in the directory `path`.
 
