@@ -1,22 +1,6 @@
 sjudge
 ======
 
-**Summary:** <sub>
-[![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge)
-[![Code Size](https://img.shields.io/github/languages/code-size/steven-xia/sjudge?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge)
-[![Dependencies](https://img.shields.io/librariesio/github/steven-xia/sjudge?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge/blob/master/requirements.txt)
-[![License](https://img.shields.io/github/license/steven-xia/sjudge?logo=open-source-initiative&logoColor=white)](https://github.com/steven-xia/sjudge/blob/master/LICENSE)
-</sub>
-
-**Services:** <sub>
-[![Build Status](https://img.shields.io/travis/com/steven-xia/sjudge/master?logo=travis)](https://travis-ci.com/steven-xia/sjudge)
-[![Coverage Status](https://img.shields.io/coveralls/github/steven-xia/sjudge/master?logo=coveralls&logoColor=blue)](https://coveralls.io/github/steven-xia/sjudge?branch=master)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/steven-xia/sjudge.svg?logo=lgtm&logoColor=pink)](https://lgtm.com/projects/g/steven-xia/sjudge/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/steven-xia/sjudge.svg?logo=lgtm&logoColor=pink)](https://lgtm.com/projects/g/steven-xia/sjudge/context:python)
-</sub>
-
-***
-
 `sjudge` is a client-side programming judge made for use as a teaching tool.
 It is programmed in pure Python and designed to be as simple and robust as possible.
 
