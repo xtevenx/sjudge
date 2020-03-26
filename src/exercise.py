@@ -5,10 +5,9 @@ This module manages the loading of exercise related information.
 import json
 import os
 
-import typing
-from typing import Dict, List
+from typing import Any, Dict, List, Type
 
-SPEC_TYPE: typing.Type = Dict[str, typing.Any]
+SPEC_TYPE: Type = Dict[str, Any]
 
 REQUIRED_FILES: List[str] = [
     "json",  # exercise specifications
