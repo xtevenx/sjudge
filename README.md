@@ -2,17 +2,17 @@ sjudge
 ======
 
 **Summary:** <sub>
-[![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge)
-[![Code Size](https://img.shields.io/github/languages/code-size/steven-xia/sjudge?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge)
-[![Dependencies](https://img.shields.io/librariesio/github/steven-xia/sjudge?logo=python&logoColor=yellow)](https://github.com/steven-xia/sjudge/blob/master/requirements.txt)
-[![License](https://img.shields.io/github/license/steven-xia/sjudge?logo=open-source-initiative&logoColor=white)](https://github.com/steven-xia/sjudge/blob/master/LICENSE)
+[![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue?logo=python&logoColor=yellow)](https://github.com/xtevenx/sjudge)
+[![Code Size](https://img.shields.io/github/languages/code-size/xtevenx/sjudge?logo=python&logoColor=yellow)](https://github.com/xtevenx/sjudge)
+[![Dependencies](https://img.shields.io/librariesio/github/xtevenx/sjudge?logo=python&logoColor=yellow)](https://github.com/xtevenx/sjudge/blob/master/requirements.txt)
+[![License](https://img.shields.io/github/license/xtevenx/sjudge?logo=open-source-initiative&logoColor=white)](https://github.com/xtevenx/sjudge/blob/master/LICENSE)
 </sub>
 
 **Services:** <sub>
-[![Build Status](https://img.shields.io/travis/com/steven-xia/sjudge/master?logo=travis)](https://travis-ci.com/steven-xia/sjudge)
-[![Coverage Status](https://img.shields.io/coveralls/github/steven-xia/sjudge/master?logo=coveralls&logoColor=blue)](https://coveralls.io/github/steven-xia/sjudge?branch=master)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/steven-xia/sjudge.svg?logo=lgtm&logoColor=pink)](https://lgtm.com/projects/g/steven-xia/sjudge/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/steven-xia/sjudge.svg?logo=lgtm&logoColor=pink)](https://lgtm.com/projects/g/steven-xia/sjudge/context:python)
+[![Build Status](https://img.shields.io/travis/com/xtevenx/sjudge/master?logo=travis)](https://travis-ci.com/xtevenx/sjudge)
+[![Coverage Status](https://img.shields.io/coveralls/github/xtevenx/sjudge/master?logo=coveralls&logoColor=blue)](https://coveralls.io/github/xtevenx/sjudge?branch=master)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/xtevenx/sjudge.svg?logo=lgtm&logoColor=pink)](https://lgtm.com/projects/g/xtevenx/sjudge/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/xtevenx/sjudge.svg?logo=lgtm&logoColor=pink)](https://lgtm.com/projects/g/xtevenx/sjudge/context:python)
 </sub>
 
 ***
@@ -85,4 +85,4 @@ The new exercise name should now be listed when you run `python3 main.py --list_
 License
 -------
 
-`sjudge` is licensed under the [GNU General Public License v3.0](https://github.com/steven-xia/sjudge/blob/master/LICENSE).
+`sjudge` is licensed under the [GNU General Public License v3.0](https://github.com/xtevenx/sjudge/blob/master/LICENSE).
