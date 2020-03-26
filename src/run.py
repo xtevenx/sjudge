@@ -6,7 +6,8 @@ various extra features enabled by `psutil`.
 import psutil
 import subprocess
 import time
-import typing
+
+from typing import List
 
 
 class CompletedProcess(subprocess.CompletedProcess):
@@ -35,7 +36,7 @@ class CompletedProcess(subprocess.CompletedProcess):
         self.memory_exceeded: bool = memory_exceeded
 
 
-def run(args: typing.List[str], stdin_string: str, memory_limit: int, time_limit: float
+def run(args: List[str], stdin_string: str, memory_limit: int, time_limit: float
         ) -> CompletedProcess:
     """
     Run command with arguments and return a `CompletedProcess`

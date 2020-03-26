@@ -2,7 +2,7 @@
 This module manages the truncation of messages for a cleaner output.
 """
 
-import typing
+from typing import List, Optional
 
 # a large number to represent no limit
 INFINITY: int = (1 << 64) - 1
@@ -11,8 +11,8 @@ INFINITY: int = (1 << 64) - 1
 TRUNCATED_STRING: str = "⯇truncated⯈"
 
 
-def truncate(s: typing.List[str], char_limit: typing.Optional[int] = None,
-             nl_limit: typing.Optional[int] = None) -> typing.List[str]:
+def truncate(s: List[str], char_limit: Optional[int] = None, nl_limit: Optional[int] = None
+             ) -> List[str]:
     """
     Truncate a given string to either `char_limit` characters or
     `nl_limit` lines, using the first one that occurs.
@@ -32,7 +32,7 @@ def truncate(s: typing.List[str], char_limit: typing.Optional[int] = None,
     char_limit = INFINITY if char_limit is None else char_limit
     nl_limit = INFINITY if nl_limit is None else nl_limit
 
-    return_s: typing.List[str] = []
+    return_s: List[str] = []
     for i, line in enumerate(s):
         if len(line) > char_limit:
             return_s.append(line[:char_limit])

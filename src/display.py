@@ -3,10 +3,10 @@ This module manages the logging/displaying of information.
 """
 
 import sys
-import typing
+from typing import Dict
 
 # characters to use when console doesn't support Unicode
-SIMPLE_CHARACTERS: typing.Dict[str, str] = {
+SIMPLE_CHARACTERS: Dict[str, str] = {
     "⮡": "\\>",
     "→": "->",
     "⯇": "<",
