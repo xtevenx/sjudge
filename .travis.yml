@@ -3,50 +3,50 @@ os: linux
 
 jobs:
   include:
-#    - name: "Python 3.7.6 on macOS"
+#    - name: "Python 3.7.8 on macOS"
 #      os: osx
 #      language: generic
-#      python: "3.7.6"
-#    - name: "Python 3.8.1 on macOS"
+#      python: "3.7.8"
+#    - name: "Python 3.8.5 on macOS"
 #      os: osx
 #      language: generic
-#      python: "3.8.1"
-    - name: "Python 3.7.6 on Xenial Linux"
+#      python: "3.8.5"
+    - name: "Python 3.7.8 on Xenial Linux"
       os: linux
       dist: xenial
-      python: "3.7.6"
-    - name: "Python 3.8.1 on Xenial Linux"
+      python: "3.7.8"
+    - name: "Python 3.8.5 on Xenial Linux"
       os: linux
       dist: xenial
-      python: "3.8.1"
+      python: "3.8.5"
     - name: "Python 'nightly' on Xenial Linux"
       os: linux
       dist: xenial
       python: "nightly"
-    - name: "Python 3.7.6 on Bionic Linux"
+    - name: "Python 3.7.8 on Bionic Linux"
       os: linux
       dist: bionic
-      python: "3.7.6"
-    - name: "Python 3.8.1 on Bionic Linux"
+      python: "3.7.8"
+    - name: "Python 3.8.5 on Bionic Linux"
       os: linux
       dist: bionic
-      python: "3.8.1"
+      python: "3.8.5"
     - name: "Python 'nightly' on Bionic Linux"
       os: linux
       dist: bionic
       python: "nightly"
-    - name: "Python 3.7.6 on Windows"
+    - name: "Python 3.7.8 on Windows"
       os: windows
       language: shell
       before_install:
-        - choco install python --version 3.7.6
+        - choco install python --version 3.7.8
         - python -m pip install --upgrade pip
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-    - name: "Python 3.8.1 on Windows"
+    - name: "Python 3.8.5 on Windows"
       os: windows
       language: shell
       before_install:
-        - choco install python --version 3.8.1
+        - choco install python --version 3.8.5
         - python -m pip install --upgrade pip
       env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 
