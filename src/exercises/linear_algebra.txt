@@ -2,7 +2,7 @@ Description:
     Given a system of equations with `N` unknowns, solve it.
 
 Input Specification:
-    The first line consists of a single number `N` (1 <= `N` <= 12).
+    The first line consists of a single number `N` (1 <= `N` <= 15).
 
     The next `N` lines consists of `N` numbers each listed as such:
 
@@ -19,3 +19,27 @@ Input Specification:
 Output Specification:
     The output consists of `N` lines, with the value of the `i`th unknown on
     line `i` (in the order that their coefficients were given).
+
+Test Samples:
+    Input 1:
+
+        2
+        124 42 13 -113
+        -5308 -4783
+
+    Output 1:
+
+        -55
+        36
+
+    Input 2:
+
+        3
+        -14 61 69 15 -26 -123 -82 124 -77
+        -13398 17027 -7075
+
+    Output 2:
+
+        82
+        -73
+        -113

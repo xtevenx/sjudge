@@ -20,15 +20,15 @@ EXERCISE_NAME: str = __file__[:-3]
 EXERCISE_SPECIFICATIONS: typing.Dict[str, typing.Any] = {
     "exercise": EXERCISE_NAME,
     "judge": "default",
-    "time_limit": 1.0,
+    "time_limit": 10.0,
     "memory_limit": 256,
 }
 
 # set the number of testcases for the exercise to have.
-TESTCASES_PER_N: int = 5
+TESTCASES_PER_N: int = 4
 
 # `N` is conventionally the number of inputs in the test case.
-N_RANGE: iter = range(1, 13)
+N_RANGE: iter = range(1, 16)
 
 # `X` is each input in the test case.
 X_RANGE: iter = range(-(1 << 7), 1 << 7)
