@@ -7,12 +7,12 @@ from math import floor, sqrt
 # The "input/output format" for the testing data is a list of strings.
 # Each string in the list represents a line of characters that is to be
 # passed to the tested program.
-IO_TYPE: typing.Type = typing.List[str]
+IO_TYPE = typing.List[str]
 
 # The format of a test is a tuple of two "input/output format" lists.
 # The first represents the input that is given to the tested program
 # and the second represents the expected output from the program.
-TEST_TYPE: typing.Type = typing.Tuple[IO_TYPE, IO_TYPE]
+TEST_TYPE = typing.Tuple[IO_TYPE, IO_TYPE]
 
 # Set the name of the exercise for which to generate testing data (this
 # file should be called EXERCISE_NAME.py).
