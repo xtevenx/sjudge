@@ -1,20 +1,13 @@
 Description:
-    Give an explanation of the problem along with all the necessary background
-    information. Err on the side of caution when assuming the users'
-    knowledge.
+    Given a non-negative integer `N`, find the number of non-negative integers that
+    are factors of `N`. If there are an unlimited number of factors, output `inf`.
 
 Input Specification:
-    Specify the lines of input with the following details:
-      - the amount of inputs (conventionally `N`)
-      - the constraints (minimum and maximum; conventionally `x`)
-      - if giving a sequence of inputs, specify which element in the
-        sequence corresponds to which element of the problem (described in
-        `Description` above).
+    The input consists of one line containing the number `N` (0 <= `N` < 10^12).
 
 Output Specification:
-    Specify the lines of output expected from the program. If expecting a
-    sequence, specify which element in the sequence corresponds to which which
-    element of the problem.
+    The output consists of one line containing the number of non-negative integers
+    that are factors of `N`, or `inf` if there is an unlimited number.
 
 Test Samples:
     Input 1:
