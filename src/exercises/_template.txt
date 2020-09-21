@@ -15,3 +15,12 @@ Output Specification:
     Specify the lines of output expected from the program. If expecting a
     sequence, specify which element in the sequence corresponds to which which
     element of the problem.
+
+Test Samples:
+    Input 1:
+
+        hello ...
+
+    Output 1:
+
+        world ...

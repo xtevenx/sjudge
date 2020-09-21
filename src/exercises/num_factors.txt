@@ -1,0 +1,27 @@
+Description:
+    Given a non-negative integer `N`, find the number of non-negative integers that
+    are factors of `N`. If there are an unlimited number of factors, output `inf`.
+
+Input Specification:
+    The input consists of one line containing the number `N` (0 <= `N` < 10^12).
+
+Output Specification:
+    The output consists of one line containing the number of non-negative integers
+    that are factors of `N`, or `inf` if there is an unlimited number.
+
+Test Samples:
+    Input 1:
+
+        460
+
+    Output 1:
+
+        12
+
+    Input 2:
+
+        52171128100
+
+    Output 2:
+
+        243

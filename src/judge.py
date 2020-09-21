@@ -6,7 +6,7 @@ the `judge()` and `judge_one()` functions.
 import shlex
 
 from typing import (
-    Callable, Dict, Iterable, List, Sequence, Tuple, Type, Union
+    Callable, Dict, Iterable, List, Sequence, Tuple, Union
 )
 
 import display
@@ -19,24 +19,24 @@ import truncate
 # The "input/output format" for the testing data is a list of strings.
 # Each string in the list represents a line of characters that is to be
 # passed to the tested program.
-IO_TYPE: Type = List[str]
+IO_TYPE = List[str]
 
 # A test case is represented by two IO_TYPE objects. The input and its
 # reference output.
-TESTCASE_TYPE: Type = Tuple[IO_TYPE, IO_TYPE]
+TESTCASE_TYPE = Tuple[IO_TYPE, IO_TYPE]
 
 # A 'judge' is a function which takes in two IO_TYPE objects (the
 # program's output and the reference output) and returns `True` if the
 # program's output is deemed correct.
-JUDGE_TYPE: Type = Callable[[IO_TYPE, IO_TYPE], bool]
+JUDGE_TYPE = Callable[[IO_TYPE, IO_TYPE], bool]
 
 # ANY_JUDGE represents anything that could be a judge: either a
 # JUDGE_TYPE function or a string, the name of a judge.
-ANY_JUDGE: Type = Union[str, JUDGE_TYPE]
+ANY_JUDGE = Union[str, JUDGE_TYPE]
 
 # A 'truncator' is a function that takes in an IO_TYPE object and
 # returns a truncated IO_TYPE object.
-TRUNCATOR_TYPE: Type = Callable[[IO_TYPE], IO_TYPE]
+TRUNCATOR_TYPE = Callable[[IO_TYPE], IO_TYPE]
 
 # define judging verdicts
 ANSWER_CORRECT: str = "Answer Correct"

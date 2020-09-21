@@ -3,5 +3,10 @@
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/src/exercises/_template.txt" />
+    <file url="file://$PROJECT_DIR$/src/exercises/linear_algebra.txt" />
+    <file url="file://$PROJECT_DIR$/src/exercises/num_factors.txt" />
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (sjudge)" project-jdk-type="Python SDK" />
 </project>
