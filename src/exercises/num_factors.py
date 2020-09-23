@@ -1,4 +1,5 @@
 import json
+import os
 import typing
 
 from random import choice
@@ -16,7 +17,7 @@ TEST_TYPE = typing.Tuple[IO_TYPE, IO_TYPE]
 
 # Set the name of the exercise for which to generate testing data (this
 # file should be called EXERCISE_NAME.py).
-EXERCISE_NAME: str = __file__[:-3]
+EXERCISE_NAME: str = os.path.basename(__file__[:-3])
 
 # define all required exercise specifications.
 EXERCISE_SPECIFICATIONS: typing.Dict[str, typing.Any] = {
