@@ -33,7 +33,7 @@ Memory limit: 256 MiB
 def test__exists():
     assert exists("tests/exercises/", "test0")
     assert exists("tests/exercises/", "test1")
-    assert not exists("tests/exercises/", "test2")
+    assert exists("tests/exercises/", "test2")
     assert not exists("tests/exercises/", "test3")
 
     assert not exists("tests/", "test-1")
