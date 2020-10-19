@@ -81,7 +81,8 @@ def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
     Get the exercise specifications of the exercise `ex_name` located
     in the directory `path`.
 
-    :return: A dictionary with its keys being the names of different
+    :return SPEC_TYPE:
+        A dictionary with its keys being the names of different
         attributes of the exercise.
             ex: {"judge": "default", "time_limit": 2.0, ... }
     """
