@@ -9,12 +9,10 @@ from typing import (
     Callable, Dict, Iterable, List, Sequence, Tuple, Union
 )
 
-import display
 from judges import float_judge
 from judges import identical_judge
 from judges import default_judge
 import run
-import truncate
 
 # The "input/output" format for the testing data is a list of strings.
 # Each string in the list represents a line of characters that is to be
@@ -34,10 +32,6 @@ JUDGE_TYPE = Callable[[IO_TYPE, IO_TYPE], bool]
 # JUDGE_TYPE function or a string (the name of a judge).
 ANY_JUDGE = Union[JUDGE_TYPE, str]
 
-# A 'truncator' is a function that takes in an IO_TYPE object and
-# returns a truncated IO_TYPE object.
-TRUNCATOR_TYPE = Callable[[IO_TYPE], IO_TYPE]
-
 # Define the possible judging verdicts.
 ANSWER_CORRECT: str = "Answer Correct"
 RUNTIME_ERROR: str = "Runtime Error"
@@ -52,22 +46,25 @@ JUDGES: Dict[str, JUDGE_TYPE] = {
     "default": default_judge.default_judge
 }
 
-# Define the output truncator.
-DEFAULT_TRUNCATOR: TRUNCATOR_TYPE = lambda s: truncate.truncate(s, 200, 4)
-
 # Define the other utility constants.
 MEBIBYTE: int = 1024 * 1024
 MILLISECOND: float = 1000
 
 
 class TestCaseResult:
-    def __init__(self,
-                 exercise_input: IO_TYPE, exercise_output: IO_TYPE,
-                 program_stdout: IO_TYPE, program_stderr: IO_TYPE,
-                 program_exitcode: int,
-                 verdict: str = ANSWER_CORRECT,
-                 program_time: float = 0, program_tle: bool = False,
-                 program_memory: int = 0, program_mle: bool = False):
+    def __init__(
+            self,
+            exercise_input: IO_TYPE,
+            exercise_output: IO_TYPE,
+            program_stdout: IO_TYPE,
+            program_stderr: IO_TYPE,
+            program_exitcode: int,
+            verdict: str = ANSWER_CORRECT,
+            program_time: float = 0,
+            program_tle: bool = False,
+            program_memory: int = 0,
+            program_mle: bool = False
+    ):
         """
         A class to keep track of a test case result.
 
@@ -118,6 +115,10 @@ class TestCaseResult:
         self.verdict: str = verdict
         self.passed: bool = self.verdict == ANSWER_CORRECT
 
+        # Possible attribute to say which test case this one is if it
+        # belongs in a set of test cases.
+        self.testcase_no: int = 0
+
 
 class JudgeResult:
     def __init__(self, test_results: Sequence[TestCaseResult] = ()) -> None:
@@ -164,14 +165,15 @@ class JudgeResult:
             self.verdict = tc.verdict
 
 
-def judge_program(program_command: str,
-                  testcases: Sequence[TESTCASE_TYPE],
-                  exercise: str = "???",
-                  time_limit: float = 1.0,
-                  memory_limit: int = 256,
-                  judge: ANY_JUDGE = "default",
-                  truncator: TRUNCATOR_TYPE = DEFAULT_TRUNCATOR
-                  ) -> JudgeResult:
+def judge_program(
+        program_command: str,
+        testcases: Sequence[TESTCASE_TYPE],
+        time_limit: float = 1.0,
+        memory_limit: int = 256,
+        judge: ANY_JUDGE = "default",
+        progress_hook: Callable[[TestCaseResult], None] = lambda tc: None,
+        **kwargs
+) -> JudgeResult:
     """
     Judge a program on a set of test cases.
 
@@ -183,9 +185,6 @@ def judge_program(program_command: str,
         The first value represents the input for the test case whereas
         the second value represents the reference output.
 
-    :param str exercise:
-        The name of the exercise.
-
     :param float time_limit:
         The time limit for the exercise (in seconds).
 
@@ -196,70 +195,44 @@ def judge_program(program_command: str,
         Can be one of two possibilities: a judging function of type
         `JUDGE_TYPE`, or the name of a build-in judging function.
 
-    :param TRUNCATOR_TYPE truncator:
-        The truncation function for the exercise.
+    :param Callable[[TestCaseResult], None] progress_hook:
+        A hook function to be called every time a test case
+        completes. This function should accept an argument of
+        `TestCaseResult`, the result of the test case.
+
+    :param dict kwargs:
+        These keyword arguments will be ignored.
 
     :return JudgeResult:
         ...
     """
 
-    display.display(f"Running tests for exercise: {exercise}")
-    display.display(f"  ⮡ Time limit: {MILLISECOND * time_limit:.0f} ms")
-    display.display(f"  ⮡ Memory limit: {memory_limit} MiB")
-    display.display(f"  ⮡ Judge: {judge}")
-    display.display()
-
     result_tracker = JudgeResult()
 
     for test_number, (test_input, test_output) in enumerate(testcases):
-        this_result = judge_one(
-            program_command, test_input, test_output, MILLISECOND * time_limit, memory_limit, judge
+        result_tracker += judge_one(
+            program_command,
+            test_input,
+            test_output,
+            MILLISECOND * time_limit,
+            memory_limit,
+            judge,
         )
 
-        display.display("Case #{} → {}  [{:.0f} ms, {:.2f} MiB]".format(
-            test_number + 1,
-            this_result.verdict,
-            this_result.program_time,
-            this_result.program_memory / MEBIBYTE
-        ), v=display.RESULT_ONLY)
-
-        if this_result.verdict == RUNTIME_ERROR:
-            display.display("  Error Message:")
-            display.display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.program_stderr)))
-            display.display("  Exit code:")
-            display.display("  ⮡ Process finished with exit code {}".format(
-                this_result.program_exitcode
-            ))
-
-        elif this_result.verdict == WRONG_ANSWER:
-            display.display("  Expected output:")
-            display.display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.exercise_output)))
-            display.display("  Received output:")
-            display.display("\n".join(f"  ⮡ {s}" for s in truncator(this_result.program_stdout)))
-
-        result_tracker += this_result
-
-    if result_tracker.verdict == ANSWER_CORRECT:
-        details = "{:.0f} ms, {:.2f} MiB".format(
-            result_tracker.maximum_time, result_tracker.maximum_memory / MEBIBYTE
-        )
-    else:
-        details = result_tracker.verdict
-
-    display.display("Final score: {}/{}  [{}]".format(
-        result_tracker.passed, result_tracker.total, details
-    ), v=display.SUMMARY_ONLY)
+        result_tracker[-1].testcase_no = test_number
+        progress_hook(result_tracker[-1])
 
     return result_tracker
 
 
-def judge_one(program_command: str,
-              test_input: IO_TYPE,
-              test_output: IO_TYPE,
-              time_limit: float = 1000,
-              memory_limit: int = 256,
-              judge: ANY_JUDGE = "default"
-              ) -> TestCaseResult:
+def judge_one(
+        program_command: str,
+        test_input: IO_TYPE,
+        test_output: IO_TYPE,
+        time_limit: float = 1000,
+        memory_limit: int = 256,
+        judge: ANY_JUDGE = "default"
+) -> TestCaseResult:
     """
     Judge a program on a single test case.
 
