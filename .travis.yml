@@ -3,27 +3,27 @@ os: linux
 
 jobs:
   include:
-    - name: "Python 3.7.x on Bionic Linux"
+    - name: "Python 3.7.9 on Bionic Linux"
       os: linux
       dist: bionic
-      python: "3.7"
-    - name: "Python 3.8.x on Bionic Linux"
+      python: "3.7.9"
+    - name: "Python 3.8.6 on Bionic Linux"
       os: linux
       dist: bionic
-      python: "3.8"
+      python: "3.8.6"
     - name: "Python 'nightly' on Bionic Linux"
       os: linux
       dist: bionic
       python: "nightly"
 
-    - name: "Python 3.7.x on Focal Linux"
+    - name: "Python 3.7.9 on Focal Linux"
       os: linux
       dist: focal
-      python: "3.7"
-    - name: "Python 3.8.x on Focal Linux"
+      python: "3.7.9"
+    - name: "Python 3.8.6 on Focal Linux"
       os: linux
       dist: focal
-      python: "3.8"
+      python: "3.8.6"
     - name: "Python 'nightly' on Focal Linux"
       os: linux
       dist: focal
