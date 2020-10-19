@@ -49,9 +49,6 @@ def test__get_description():
         get_description("tests/exercises/", "test1")
 
     with pytest.raises(AssertionError):
-        get_description("tests/exercises/", "test2")
-
-    with pytest.raises(AssertionError):
         get_description("tests/exercises/", "test3")
 
     with pytest.raises(AssertionError):
@@ -76,9 +73,6 @@ def test__get_specs():
         get_description("tests/exercises/", "test1")
 
     with pytest.raises(AssertionError):
-        get_specs("tests/exercises/", "test2")
-
-    with pytest.raises(AssertionError):
         get_specs("tests/exercises/", "test3")
 
     with pytest.raises(AssertionError):
@@ -96,7 +90,7 @@ def test__get_specs():
 
 def test__list_exercises():
     assert list_exercises("tests/") == []
-    assert sorted(list_exercises("tests/exercises/")) == ["test0", "test1"]
+    assert sorted(list_exercises("tests/exercises/")) == ["test0", "test1", "test2"]
 
     with pytest.raises(AssertionError):
         list_exercises("tests/exercise_test.py")
