@@ -11,19 +11,28 @@ INFINITY: int = (1 << 64) - 1
 TRUNCATED_STRING: str = "⯇truncated⯈"
 
 
-def truncate(s: List[str], char_limit: Optional[int] = None, nl_limit: Optional[int] = None
-             ) -> List[str]:
+def truncate(
+        s: List[str],
+        char_limit: Optional[int] = None,
+        nl_limit: Optional[int] = None
+) -> List[str]:
     """
     Truncate a given string to either `char_limit` characters or
-    `nl_limit` lines, using the first one that occurs.
+    `nl_limit` lines, using the more limiting one.
 
-    :param s: a list of strings; the thing to truncate (each string in
-        the list represents one line of a program's output).
-    :param char_limit: an integer; the maximum number of characters in
-        the truncated string.
-    :param nl_limit: an integer; the maximum number of newlines in the
-        truncated string.
-    :return: a list of strings; the truncated output.
+    :param List[str] s:
+        The message to truncate (each string in the list represents one
+        line of a program's output).
+
+    :param int char_limit:
+        The maximum number of characters in the truncated string.
+
+    :param int nl_limit:
+        The maximum number of newlines in the truncated string.
+
+    :return List[str]:
+        The output string, with a maximum of `char_limit` characters
+        and `nl_limit` lines.
     """
 
     if char_limit is None and nl_limit is None:

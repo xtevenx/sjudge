@@ -17,6 +17,10 @@ SIMPLE_CHARACTERS: Dict[str, str] = {
 
 
 def _truncator(s):
+    """
+    Default configuration for the output truncator.
+    """
+
     return truncate.truncate(s, 200, 4)
 
 
@@ -34,13 +38,8 @@ def display(s: str = "", **kwargs) -> None:
         print(s, **kwargs)
 
 
-def d_exercise_specs(
-        exercise: str,
-        time_limit: float,
-        memory_limit: int,
-        judge: str,
-        **kwargs
-) -> None:
+def d_exercise_specs(exercise: str, time_limit: float, memory_limit: int,
+                     judge: str, **kwargs) -> None:
     """
     Display the specifications of an exercise.
     """
@@ -79,6 +78,10 @@ def d_progress_hook(tc) -> None:
 
 
 def d_judging_summary(jr) -> None:
+    """
+    Display the summary of a judging result.
+    """
+
     if jr.verdict == sjudge.ANSWER_CORRECT:
         details = "{:.0f} ms, {:.2f} MiB".format(
             jr.maximum_time, jr.maximum_memory / sjudge.MEBIBYTE
