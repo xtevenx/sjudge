@@ -7,7 +7,7 @@ from judge import judge_program
 from command import get_command
 
 MEBIBYTE = 1024 * 1024
-ml, tl, tc = (32, 6, 5)
+ml, tl, tc = (32, 6, 3)
 
 
 def test__judge_program__ac():
