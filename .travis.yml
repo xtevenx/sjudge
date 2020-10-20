@@ -3,33 +3,33 @@ os: linux
 
 jobs:
   include:
-    - name: "Python 3.7.9 on Bionic Linux"
+    - name: "Python 3.7.9 on Ubuntu 18.04 (Bionic Beaver)"
       os: linux
       dist: bionic
       python: "3.7.9"
-    - name: "Python 3.8.6 on Bionic Linux"
+    - name: "Python 3.8.6 on Ubuntu 18.04 (Bionic Beaver)"
       os: linux
       dist: bionic
       python: "3.8.6"
-    - name: "Python 'nightly' on Bionic Linux"
+    - name: "Python 'nightly' on Ubuntu 18.04 (Bionic Beaver)"
       os: linux
       dist: bionic
       python: "nightly"
 
-    - name: "Python 3.7.9 on Focal Linux"
+    - name: "Python 3.7.9 on Ubuntu 20.04 (Focal Fossa)"
       os: linux
       dist: focal
       python: "3.7.9"
-    - name: "Python 3.8.6 on Focal Linux"
+    - name: "Python 3.8.6 on Ubuntu 20.04 (Focal Fossa)"
       os: linux
       dist: focal
       python: "3.8.6"
-    - name: "Python 'nightly' on Focal Linux"
+    - name: "Python 'nightly' on Ubuntu 20.04 (Focal Fossa)"
       os: linux
       dist: focal
       python: "nightly"
 
-    - name: "Python 3.7.9 on Windows"
+    - name: "Python 3.7.9 on Windows 10"
       os: windows
       language: shell
       before_install:
@@ -37,7 +37,7 @@ jobs:
         - python -m pip install --upgrade pip
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
 
-    - name: "Python 3.8.6 on Windows"
+    - name: "Python 3.8.6 on Windows 10"
       os: windows
       language: shell
       before_install:
@@ -45,7 +45,7 @@ jobs:
         - python -m pip install --upgrade pip
       env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 
-    - name: "Python 3.9.0 on Windows"
+    - name: "Python 3.9.0 on Windows 10"
       os: windows
       language: shell
       before_install:
