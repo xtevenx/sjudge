@@ -1,4 +1,5 @@
 import _template
+
 from truncate import truncate
 
 

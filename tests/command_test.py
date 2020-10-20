@@ -1,38 +1,34 @@
-import os
-import sys
+import _template
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-source_dir = os.path.join(parent_dir, "src/")
-sys.path.append(source_dir)
-
-import platform
 import pytest
 
-from command import _exists
+import platform
+
 from command import get_command
 
-WINDOWS = "Windows"
+WINDOWS: str = "Windows"
 
 
-def test___exists():
-    assert _exists("python" if platform.system() == WINDOWS else "python3") is True
-    assert _exists("testtesttest") is False
-
-
-def test__get_command():
+def test__get_command__default():
     assert get_command("main") == "./main"
     assert get_command("main.exe") == "./main.exe"
+
+
+# I'm pretty sure all the test systems have Python installed.
+def test__get_command__python():
+    c = "python main.py" if platform.system() == WINDOWS else "python3 main.py"
+    assert get_command("main.py") == c
 
     c = "python main.pyc" if platform.system() == WINDOWS else "python3 main.pyc"
     assert get_command("main.pyc") == c
 
-    c = "python main.py" if platform.system() == WINDOWS else "python3 main.py"
-    assert get_command("main.py") == c
 
-    # test for `get_command` failure.
+# Test for get_command() failure on non-existent command.
+def test__get_command__no_exist():
     import command
-    command.LANGUAGES[frozenset({"test"})] = ("testtesttest",) * 2
+
+    non_existent = "hopefullynothingiscalledthis"
+    command.LANGUAGES[frozenset({non_existent})] = (non_existent,)
 
     with pytest.raises(AssertionError):
-        assert get_command("main.test")
+        assert get_command(f"main.{non_existent}")
