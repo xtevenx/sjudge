@@ -214,7 +214,7 @@ def judge_program(
             program_command,
             test_input,
             test_output,
-            MILLISECOND * time_limit,
+            time_limit,
             memory_limit,
             judge,
         )
