@@ -79,15 +79,3 @@ def test__run__wa():
 def test__run__no_exist():
     with pytest.raises(AssertionError):
         run(["hopefullynothingiscalledthis"], "", memory_limit=ml, time_limit=tl)
-
-
-def test__run__childprocess():
-    with pytest.raises(AssertionError):
-        a = shlex.split(get_command("tests/solutions/childprocess_tester.py"))
-        run(a, "", memory_limit=ml, time_limit=tl)
-
-
-def test__run__connections():
-    with pytest.raises(AssertionError):
-        a = shlex.split(get_command("tests/solutions/connections_tester.py"))
-        run(a, "", memory_limit=ml, time_limit=tl)
