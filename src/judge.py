@@ -229,7 +229,7 @@ def judge_one(
         program_command: str,
         test_input: IO_TYPE,
         test_output: IO_TYPE,
-        time_limit: float = 1000,
+        time_limit: float = 1.0,
         memory_limit: int = 256,
         judge: ANY_JUDGE = "default"
 ) -> TestCaseResult:
@@ -246,7 +246,7 @@ def judge_one(
         The reference output to `test_input`.
 
     :param float time_limit:
-        The time limit for the test case (in milliseconds).
+        The time limit for the test case (in seconds).
 
     :param int memory_limit:
         The memory limit for the exercise (in mebibytes).
@@ -262,7 +262,7 @@ def judge_one(
     process_return = run.run(
         shlex.split(program_command),
         stdin_string=_encode_io(test_input),
-        time_limit=time_limit / MILLISECOND,
+        time_limit=time_limit,
         memory_limit=MEBIBYTE * memory_limit,
     )
 
