@@ -135,7 +135,10 @@ def run(
             break
 
     while process.poll() is None:
-        process.kill()
+        try:
+            process.kill()
+        except psutil.NoSuchProcess:
+            break
 
     fp_out.seek(0)
     stdout = str(fp_out.read(), encoding="utf-8")
