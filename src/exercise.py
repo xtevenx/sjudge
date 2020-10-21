@@ -1,5 +1,6 @@
 """
-This module manages the loading of exercise related information.
+This module manages the loading and management of exercise related
+information.
 """
 
 import json
@@ -9,9 +10,8 @@ from typing import Any, Dict, List
 
 SPEC_TYPE = Dict[str, Any]
 
-REQUIRED_FILES: List[str] = [
+_REQUIRED_FILES: List[str] = [
     "json",  # exercise specifications
-    "py",  # test case generation
     "txt",  # exercise description
 ]
 
@@ -33,14 +33,9 @@ def exists(path: str, ex_name: str) -> bool:
     """
     Determine whether the exercise `ex_name` exists in the directory
     `path`.
-
-    :param path: a string; the directory in which the supposed exercise
-        is located.
-    :param ex_name: a string; the name of the supposed exercise.
-    :return: a boolean; `True` if the exercise exists.
     """
 
-    for file_ext in REQUIRED_FILES:
+    for file_ext in _REQUIRED_FILES:
         ex_path = os.path.join(path, f"{ex_name}.{file_ext}")
         if not os.path.isfile(ex_path):
             return False
@@ -49,14 +44,8 @@ def exists(path: str, ex_name: str) -> bool:
 
 def get_description(path: str, ex_name: str) -> str:
     """
-    Get the exercise description of the exercise `ex_name` located in
-    the directory `path`.
-
-    :param path: a string; the directory in which the exercise is
-        located.
-    :param ex_name: a string; the name of the exercise.
-    :return: a string; the description (along with the specifications)
-        of the exercise.
+    Get the description of the exercise `ex_name` located in the
+    directory `path`.
     """
 
     if not exists(path, ex_name):
@@ -71,9 +60,12 @@ def get_description(path: str, ex_name: str) -> str:
         formatted_key = key.replace("_", " ").capitalize()
 
         try:
-            return_str += SPEC_FORMATTING[key].format(key=formatted_key, value=value) + "\n"
+            return_str += SPEC_FORMATTING[key].format(
+                key=formatted_key, value=value
+            )
         except KeyError:
-            return_str += f"{formatted_key}: {value}\n"
+            return_str += f"{formatted_key}: {value}"
+        return_str += "\n"
 
     return_str += "\n"
 
@@ -89,22 +81,19 @@ def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
     Get the exercise specifications of the exercise `ex_name` located
     in the directory `path`.
 
-    :param path: a string; the directory in which the exercise is
-        located.
-    :param ex_name: a string; the name of the exercise.
-    :return: `SPEC_TYPE`; a dictionary with each of its keys
-        being the name of a specification.
-
+    :return SPEC_TYPE:
+        A dictionary with its keys being the names of different
+        attributes of the exercise.
             ex: {"judge": "default", "time_limit": 2.0, ... }
     """
 
     if not exists(path, ex_name):
         raise AssertionError(f"the exercise `{ex_name}` does not exist")
 
-    desc_path: str = os.path.join(path, f"{ex_name}.json")
+    spec_path: str = os.path.join(path, f"{ex_name}.json")
 
     try:
-        with open(desc_path, "r") as fd:
+        with open(spec_path, "r") as fd:
             specs: SPEC_TYPE = json.load(fd)
 
         for spec_name in REQUIRED_SPECS:
@@ -114,21 +103,20 @@ def get_specs(path: str, ex_name: str) -> SPEC_TYPE:
         return specs
 
     except (json.JSONDecodeError, AssertionError):
-        raise AssertionError(f"the file `{desc_path}` is corrupt; please generate it again")
+        raise AssertionError(
+            f"the file `{spec_path}` is corrupt."
+        )
 
 
 def list_exercises(path: str) -> List[str]:
     """
     Get the names of all the exercises found in the directory `path`.
-
-    :param path: a string; the directory in which to look for
-        exercises.
-    :return: a list of strings; the names of all the exercises located
-        in the directory `path`.
     """
 
     if not os.path.isdir(path):
-        raise AssertionError(f"the exercises location `{path}` is not a directory")
+        raise AssertionError(
+            f"the exercises location `{path}` is not a directory"
+        )
 
     all_names = frozenset(f.split(".")[0] for f in os.listdir(path))
 

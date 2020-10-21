@@ -32,10 +32,6 @@ def main():
         "-m", "--manual_command", action="store_true",
         help="enable this flag if you are entering the full command to run your program under "
              "`program_path` (instead of just the file name).", dest="manual_command")
-    parser.add_argument(
-        "-q", "--quiet", action="count", default=0,
-        help="use this flag if you want the program to run with less output. can be applied up to "
-             "two times.", dest="quiet")
     arguments = parser.parse_args()
 
     if arguments.list_exercises:
@@ -67,12 +63,15 @@ def main():
             raise AssertionError(f"the file `{arguments.program_path}` does not exist")
         program_command = command.get_command(arguments.program_path)
 
-    display.set_verbosity(arguments.quiet)
+    specifications = exercise.get_specs(arguments.exercises_location, arguments.exercise_name)
 
-    judge.judge_program(
+    display.d_exercise_specs(**specifications)
+    result = judge.judge_program(
         program_command,
-        **exercise.get_specs(arguments.exercises_location, arguments.exercise_name)
+        **specifications,
+        progress_hook=display.d_progress_hook
     )
+    display.d_judging_summary(result)
 
 
 if __name__ == "__main__":

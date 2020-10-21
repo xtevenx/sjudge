@@ -1,21 +1,11 @@
 sjudge
 ======
 
-**Summary:** <sub>
-[![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue?logo=python&logoColor=yellow)](https://github.com/xtevenx/sjudge)
-[![Code Size](https://img.shields.io/github/languages/code-size/xtevenx/sjudge?logo=python&logoColor=yellow)](https://github.com/xtevenx/sjudge)
-[![Dependencies](https://img.shields.io/librariesio/github/xtevenx/sjudge?logo=python&logoColor=yellow)](https://github.com/xtevenx/sjudge/blob/master/requirements.txt)
-[![License](https://img.shields.io/github/license/xtevenx/sjudge?logo=open-source-initiative&logoColor=white)](https://github.com/xtevenx/sjudge/blob/master/LICENSE)
-</sub>
-
-**Services:** <sub>
 [![Build Status](https://img.shields.io/travis/com/xtevenx/sjudge/master?logo=travis)](https://travis-ci.com/xtevenx/sjudge)
 [![Coverage Status](https://img.shields.io/coveralls/github/xtevenx/sjudge/master?logo=coveralls&logoColor=blue)](https://coveralls.io/github/xtevenx/sjudge?branch=master)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/xtevenx/sjudge.svg?logo=lgtm&logoColor=pink)](https://lgtm.com/projects/g/xtevenx/sjudge/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/xtevenx/sjudge.svg?logo=lgtm&logoColor=pink)](https://lgtm.com/projects/g/xtevenx/sjudge/context:python)
-</sub>
-
-***
+[![Dependencies](https://img.shields.io/librariesio/github/xtevenx/sjudge?logo=python&logoColor=yellow)](https://github.com/xtevenx/sjudge/blob/master/requirements.txt)
+[![License](https://img.shields.io/github/license/xtevenx/sjudge?logo=open-source-initiative&logoColor=white)](https://github.com/xtevenx/sjudge/blob/master/LICENSE)
 
 `sjudge` is a client-side programming judge made for use as a teaching tool.
 It is programmed in pure Python and designed to be as simple and robust as possible.
@@ -48,8 +38,8 @@ Supported Platforms
 
 | Operating Systems                 | Python Versions   |
 | ----------------------------------|-------------------|
-| Ubuntu 16.04 LTS (Xenial Xerus)   | Python 3.7.x      |
-| Ubuntu 18.04 LTS (Bionic Beaver)  | Python 3.8.x      |
+| Ubuntu 18.04 LTS (Bionic Beaver)  | Python 3.7.x      |
+| Ubuntu 20.04 LTS (Focal Fossa)    | Python 3.8.x      |
 | Windows 10                        |                   |
 
 Setup

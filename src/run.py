@@ -11,22 +11,33 @@ from typing import List
 
 
 class CompletedProcess(subprocess.CompletedProcess):
-    def __init__(self, *args, time_taken: float, timed_out: bool, max_memory: int,
-                 memory_exceeded: bool, **kwargs):
+    def __init__(
+            self,
+            *args,
+            time_taken: float,
+            timed_out: bool,
+            max_memory: int,
+            memory_exceeded: bool,
+            **kwargs
+    ):
         """
-        This class is a descendant of `subprocess.CompletedProcess`.
+        This class is a descendant of `subprocess.CompletedProcess`
+        with extra attributes to keep track of time taken and memory
+        required.
 
-        :param args: arguments to pass to the parent.
-        :param time_taken: a float; the time (in seconds) it took to
-            run the program.
-        :param timed_out: a boolean; `True` if the program exceeded the
-            time limit and was killed.
-        :param max_memory: an integer; the memory (in bytes) it took to
-            run the program.
-        :param memory_exceeded: a boolean; `True` if the program
-            exceeded the memory limit and was killed memory limit and
-            was killed.
-        :param kwargs: keyword arguments to pass to the parent
+        :param float time_taken:
+            The time (in seconds) the process took to run.
+
+        :param bool timed_out:
+            `True` if the program exceeded the time limit and needed to
+            be forcibly killed, otherwise `False`.
+
+        :param int max_memory:
+            The memory (in bytes) the process used when executing.
+
+        :param bool memory_exceeded:
+            `True` if the program exceeded the memory limit and needed
+            to be forcibly killed, otherwise `False`.
         """
 
         super().__init__(*args, **kwargs)
@@ -36,8 +47,12 @@ class CompletedProcess(subprocess.CompletedProcess):
         self.memory_exceeded: bool = memory_exceeded
 
 
-def run(args: List[str], stdin_string: str, memory_limit: int, time_limit: float
-        ) -> CompletedProcess:
+def run(
+        args: List[str],
+        stdin_string: str,
+        memory_limit: int,
+        time_limit: float
+) -> CompletedProcess:
     """
     Run command with arguments and return a `CompletedProcess`
     instance.
@@ -47,17 +62,25 @@ def run(args: List[str], stdin_string: str, memory_limit: int, time_limit: float
       - time usage
       - memory usage
 
-    :param args: the sequence of program arguments
-    :param stdin_string: the string to pass to the subprocess from
-        standard input.
-    :param memory_limit: an integer; the maximum memory (in bytes)
-        allowed for the program to utilize before killing it.
-    :param time_limit: a float; the maximum time (in seconds) allowed
-        for the program to utilize before killing it.
-    :return: a `CompletedProcess` instance.
-    """
+    :param List[str] args:
+        Arguments to pass to `psutil.Popen()` to start the process.
 
-    start_time = time.time()
+    :param str stdin_string:
+        The string that is to be passed to the process through standard
+        input.
+
+    :param int memory_limit:
+        The maximum memory (in bytes) the process is allowed to use;
+        the process will be forcibly killed if it uses more than this
+        amount of memory.
+
+    :param float time_limit:
+        The maximum time (in seconds) to run the process before
+        forcibly killing it.
+
+    :return CompletedProcess:
+        ...
+    """
 
     try:
         process = psutil.Popen(
@@ -74,37 +97,16 @@ def run(args: List[str], stdin_string: str, memory_limit: int, time_limit: float
     process.stdin.write(stdin_string)
     process.stdin.flush()
 
-    time_usage = time.time() - start_time
+    time_usage = time.time() - process.create_time()
     memory_usage = process.memory_info().rss
 
     while process.poll() is None:
         try:
-            time_usage = time.time() - start_time
+            time_usage = time.time() - process.create_time()
             memory_usage = max(memory_usage, process.memory_info().rss)
 
             if memory_usage > memory_limit or time_usage > time_limit:
                 process.kill()
-
-            if process.children():
-                process.kill()
-
-                # `psutil.Process()` defaults to the process that it
-                # is called from (in this case the judging script).
-                for c in psutil.Process().children(recursive=True):
-                    c.kill()
-
-                raise AssertionError("the test program attempted to start a child process")
-
-            # retrieve all the connections on the machine, then filter
-            # for the ones open by the current process by comparing
-            # PIDs. this is required instead of simply using
-            # `process.connections()` because `process.connections()`
-            # requires root access on linux based operating systems.
-            if [c for c in psutil.net_connections("all") if c.pid == process.pid]:
-                process.kill()
-
-                raise AssertionError(
-                    "the test program attempted to communicate through the network")
 
         except psutil.NoSuchProcess:
             break
