@@ -3,11 +3,27 @@ This module contains a wrapper around `subprocess.run()` that provides
 various extra features enabled by `psutil`.
 """
 
-import psutil
 import subprocess
+import tempfile
 import time
 
+import psutil
+
 from typing import List
+
+# The actual time tracker uses CPU time instead of realtime, however,
+# if the test program happens to just become dormant without using CPU,
+# then it can possibly take an indefinite amount of time to be stopped.
+# Because of this, there is a real time check to make sure the time
+# spent isn't too absurd. The `_REALTIME_BUFFER` is the the fraction of
+# the time the program is allowed to run without cpu time before it is
+# forcibly killed.
+#
+# For example, if the buffer is 0.1 with a 1.0 second timeout, then the
+# program is allowed 10% of it's runtime to be non-cpu time. This means
+# that the program can run for 1.11 real time seconds without timing
+# out because 1.11 - 0.1*1.11 == 0.999 and 0.999 < 1.0.
+_REALTIME_BUFFER: float = 0.1
 
 
 class CompletedProcess(subprocess.CompletedProcess):
@@ -82,34 +98,55 @@ def run(
         ...
     """
 
+    fp_out = tempfile.TemporaryFile()
+    fp_err = tempfile.TemporaryFile()
+
     try:
-        process = psutil.Popen(
-            args,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True
-        )
+        with tempfile.TemporaryFile() as fp_in:
+            fp_in.write(bytes(stdin_string, encoding="utf-8"))
+            fp_in.seek(0)
+
+            process = psutil.Popen(
+                args, stdin=fp_in, stdout=fp_out, stderr=fp_err, universal_newlines=True
+            )
+
     except FileNotFoundError as err:
-        msg: str = err.args[1]
-        raise AssertionError(msg[:1].lower() + msg[1:])
+        fp_out.close()
+        fp_err.close()
 
-    process.stdin.write(stdin_string)
-    process.stdin.flush()
+        raise AssertionError(err.args[1][:1].lower() + err.args[1][1:])
 
-    time_usage = time.time() - process.create_time()
-    memory_usage = process.memory_info().rss
+    time_usage, memory_usage = _get_data(process)
 
     while process.poll() is None:
         try:
-            time_usage = time.time() - process.create_time()
-            memory_usage = max(memory_usage, process.memory_info().rss)
+            time_usage, this_memory = _get_data(process)
+            memory_usage = max(memory_usage, this_memory)
+
+            realtime_usage = time.time() - process.create_time()
+            if max(time_usage, realtime_usage * (1.0 - _REALTIME_BUFFER)) > time_limit:
+                time_usage = time_limit + 0.001
+                break
 
             if memory_usage > memory_limit or time_usage > time_limit:
-                process.kill()
+                break
 
         except psutil.NoSuchProcess:
             break
+
+    while process.poll() is None:
+        try:
+            process.kill()
+        except psutil.NoSuchProcess:
+            break
+
+    fp_out.seek(0)
+    stdout = str(fp_out.read(), encoding="utf-8")
+    fp_out.close()
+
+    fp_err.seek(0)
+    stderr = str(fp_err.read(), encoding="utf-8")
+    fp_err.close()
 
     return CompletedProcess(
         args,
@@ -118,6 +155,14 @@ def run(
         timed_out=time_usage > time_limit,
         max_memory=memory_usage,
         memory_exceeded=memory_usage > memory_limit,
-        stdout=process.stdout.read(),
-        stderr=process.stderr.read()
+        stdout=stdout,
+        stderr=stderr
     )
+
+
+def _get_data(p: psutil.Process):
+    with p.oneshot():
+        t = p.cpu_times().user + p.cpu_times().system
+        m = p.memory_info().rss
+
+    return t, m
