@@ -125,7 +125,7 @@ def run(
 
             realtime_usage = time.time() - process.create_time()
             if max(time_usage, realtime_usage * (1.0 - _REALTIME_BUFFER)) > time_limit:
-                time_usage = time_usage + 0.001
+                time_usage = time_limit + 0.001
                 break
 
             if memory_usage > memory_limit or time_usage > time_limit:
