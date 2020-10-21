@@ -3,9 +3,11 @@ This module contains a wrapper around `subprocess.run()` that provides
 various extra features enabled by `psutil`.
 """
 
-import psutil
 import subprocess
+import tempfile
 import time
+
+import psutil
 
 from typing import List
 
@@ -84,20 +86,23 @@ def run(
         ...
     """
 
-    try:
-        process = psutil.Popen(
-            args,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True
-        )
-    except FileNotFoundError as err:
-        msg: str = err.args[1]
-        raise AssertionError(msg[:1].lower() + msg[1:])
+    fp_out = tempfile.TemporaryFile()
+    fp_err = tempfile.TemporaryFile()
 
-    process.stdin.write(stdin_string)
-    process.stdin.flush()
+    try:
+        with tempfile.TemporaryFile() as fp_in:
+            fp_in.write(bytes(stdin_string, encoding="utf-8"))
+            fp_in.seek(0)
+
+            process = psutil.Popen(
+                args, stdin=fp_in, stdout=fp_out, stderr=fp_err, universal_newlines=True
+            )
+
+    except FileNotFoundError as err:
+        fp_out.close()
+        fp_err.close()
+
+        raise AssertionError(err.args[1][:1].lower() + err.args[1][1:])
 
     time_usage, memory_usage = _get_data(process)
 
@@ -115,6 +120,14 @@ def run(
         except psutil.NoSuchProcess:
             break
 
+    fp_out.seek(0)
+    stdout = str(fp_out.read(), encoding="utf-8")
+    fp_out.close()
+
+    fp_err.seek(0)
+    stderr = str(fp_err.read(), encoding="utf-8")
+    fp_err.close()
+
     return CompletedProcess(
         args,
         process.poll(),
@@ -122,8 +135,8 @@ def run(
         timed_out=time_usage > time_limit,
         max_memory=memory_usage,
         memory_exceeded=memory_usage > memory_limit,
-        stdout=process.stdout.read(),
-        stderr=process.stderr.read()
+        stdout=stdout,
+        stderr=stderr
     )
 
 
