@@ -11,7 +11,19 @@ import psutil
 
 from typing import List
 
-_REALTIME_BUFFER: float = 1.0
+# The actual time tracker uses CPU time instead of realtime, however,
+# if the test program happens to just become dormant without using CPU,
+# then it can possibly take an indefinite amount of time to be stopped.
+# Because of this, there is a real time check to make sure the time
+# spent isn't too absurd. The `_REALTIME_BUFFER` is the the fraction of
+# the time the program is allowed to run without cpu time before it is
+# forcibly killed.
+#
+# For example, if the buffer is 0.1 with a 1.0 second timeout, then the
+# program is allowed 10% of it's runtime to be non-cpu time. This means
+# that the program can run for 1.11 real time seconds without timing
+# out because 1.11 - 0.1*1.11 == 0.999 and 0.999 < 1.0.
+_REALTIME_BUFFER: float = 0.1
 
 
 class CompletedProcess(subprocess.CompletedProcess):
@@ -111,14 +123,19 @@ def run(
             time_usage, this_memory = _get_data(process)
             memory_usage = max(memory_usage, this_memory)
 
-            if memory_usage > memory_limit or time_usage > time_limit:
-                process.kill()
+            realtime_usage = time.time() - process.create_time()
+            if max(time_usage, realtime_usage * (1.0 - _REALTIME_BUFFER)) > time_limit:
+                time_usage = time_usage + 0.001
+                break
 
-            if time.time() - process.create_time() > time_limit + _REALTIME_BUFFER:
-                process.kill()
+            if memory_usage > memory_limit or time_usage > time_limit:
+                break
 
         except psutil.NoSuchProcess:
             break
+
+    while process.poll() is None:
+        process.kill()
 
     fp_out.seek(0)
     stdout = str(fp_out.read(), encoding="utf-8")
