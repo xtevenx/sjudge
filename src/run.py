@@ -82,8 +82,6 @@ def run(
         ...
     """
 
-    start_time = time.time()
-
     try:
         process = psutil.Popen(
             args,
@@ -99,12 +97,12 @@ def run(
     process.stdin.write(stdin_string)
     process.stdin.flush()
 
-    time_usage = time.time() - start_time
+    time_usage = time.time() - process.create_time()
     memory_usage = process.memory_info().rss
 
     while process.poll() is None:
         try:
-            time_usage = time.time() - start_time
+            time_usage = time.time() - process.create_time()
             memory_usage = max(memory_usage, process.memory_info().rss)
 
             if memory_usage > memory_limit or time_usage > time_limit:
