@@ -9,6 +9,8 @@ import time
 
 from typing import List
 
+_REALTIME_BUFFER: float = 1.0
+
 
 class CompletedProcess(subprocess.CompletedProcess):
     def __init__(
@@ -97,15 +99,17 @@ def run(
     process.stdin.write(stdin_string)
     process.stdin.flush()
 
-    time_usage = time.time() - process.create_time()
-    memory_usage = process.memory_info().rss
+    time_usage, memory_usage = _get_data(process)
 
     while process.poll() is None:
         try:
-            time_usage = time.time() - process.create_time()
-            memory_usage = max(memory_usage, process.memory_info().rss)
+            time_usage, this_memory = _get_data(process)
+            memory_usage = max(memory_usage, this_memory)
 
             if memory_usage > memory_limit or time_usage > time_limit:
+                process.kill()
+
+            if time.time() - process.create_time() > time_limit + _REALTIME_BUFFER:
                 process.kill()
 
         except psutil.NoSuchProcess:
@@ -121,3 +125,11 @@ def run(
         stdout=process.stdout.read(),
         stderr=process.stderr.read()
     )
+
+
+def _get_data(p: psutil.Process):
+    with p.oneshot():
+        t = p.cpu_times().user + p.cpu_times().system
+        m = p.memory_info().rss
+
+    return t, m
