@@ -171,7 +171,7 @@ def judge_program(
         time_limit: float = 1.0,
         memory_limit: int = 256,
         judge: ANY_JUDGE = "default",
-        progress_hook: Callable[[TestCaseResult], None] = lambda tc: None,
+        progress_hook: Callable[[JudgeResult], None] = lambda tc: None,
         **kwargs
 ) -> JudgeResult:
     """
@@ -195,10 +195,11 @@ def judge_program(
         Can be one of two possibilities: a judging function of type
         `JUDGE_TYPE`, or the name of a build-in judging function.
 
-    :param Callable[[TestCaseResult], None] progress_hook:
+    :param Callable[[JudgeResult], None] progress_hook:
         A hook function to be called every time a test case
         completes. This function should accept an argument of
-        `TestCaseResult`, the result of the test case.
+        `JudgeResult`, the result the judging up to the
+        current test case.
 
     :param dict kwargs:
         These keyword arguments will be ignored.
@@ -220,7 +221,7 @@ def judge_program(
         )
 
         result_tracker[-1].testcase_no = test_number
-        progress_hook(result_tracker[-1])
+        progress_hook(result_tracker)
 
     return result_tracker
 
