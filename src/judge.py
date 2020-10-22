@@ -9,10 +9,10 @@ from typing import (
     Callable, Dict, Iterable, List, Sequence, Tuple, Union
 )
 
-from judges import float_judge
-from judges import identical_judge
-from judges import default_judge
-import run
+from .judges import float_judge
+from .judges import identical_judge
+from .judges import default_judge
+from . import run
 
 # The "input/output" format for the testing data is a list of strings.
 # Each string in the list represents a line of characters that is to be
