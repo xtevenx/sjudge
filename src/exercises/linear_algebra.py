@@ -1,4 +1,5 @@
 import json
+import math
 import os
 import random
 import typing
@@ -21,15 +22,15 @@ EXERCISE_NAME: str = os.path.basename(__file__[:-3])
 EXERCISE_SPECIFICATIONS: typing.Dict[str, typing.Any] = {
     "exercise": EXERCISE_NAME,
     "judge": "default",
-    "time_limit": 10.0,
+    "time_limit": 3.0,
     "memory_limit": 256,
 }
 
 # set the number of testcases for the exercise to have.
-TESTCASES_PER_N: int = 4
+NUM_TEST_CASES = 60
 
 # `N` is conventionally the number of inputs in the test case.
-N_RANGE: iter = range(1, 16)
+N_RANGE: iter = range(1, 14)
 
 # `X` is each input in the test case.
 X_RANGE: iter = range(-(1 << 7), 1 << 7)
@@ -37,12 +38,24 @@ X_RANGE: iter = range(-(1 << 7), 1 << 7)
 if __name__ == "__main__":
     tests: typing.List[TEST_TYPE] = []
 
+    divisor = 1
+    while True:
+        total = 0
+        for N in N_RANGE:
+            total += math.ceil((math.e ** N) / divisor)
+
+        if total <= NUM_TEST_CASES:
+            break
+        divisor += 1
+
     for N in N_RANGE:
-        for _ in range(TESTCASES_PER_N):
+        num_cases = math.ceil((math.e ** N) / divisor)
+
+        for _ in range(num_cases):
             solutions = random.sample(X_RANGE, N)
             coefficients = [random.sample(X_RANGE, N) for _ in range(N)]
 
-            if 0 not in solutions and random.random() < (1 / TESTCASES_PER_N):
+            if 0 not in solutions and random.random() < (1 / num_cases):
                 solutions[random.randrange(N)] = 0
 
             answers = [0 for _ in range(N)]
