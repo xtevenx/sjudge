@@ -1,19 +1,16 @@
-import _template
-
+from tests import _template
 import pytest
 
 import shlex
-
-from run import run
-from command import get_command
+import src
 
 MEBIBYTE = 1024 * 1024
 ml, tl = (64 * MEBIBYTE, 6)
 
 
 def test__run__ac():
-    a = shlex.split(get_command("tests/solutions/ac_tester.py"))
-    c = run(a, "", memory_limit=ml, time_limit=tl)
+    a = shlex.split(src.command.get_command("tests/solutions/ac_tester.py"))
+    c = src.run.run(a, "", memory_limit=ml, time_limit=tl)
     assert c.args == a
     assert c.returncode == 0
     assert c.stdout == ""
@@ -25,8 +22,8 @@ def test__run__ac():
 
 
 def test__run__mle():
-    a = shlex.split(get_command("tests/solutions/mle_tester.py"))
-    c = run(a, "", memory_limit=ml, time_limit=tl)
+    a = shlex.split(src.command.get_command("tests/solutions/mle_tester.py"))
+    c = src.run.run(a, "", memory_limit=ml, time_limit=tl)
     assert c.args == a
     assert c.returncode != 0
     assert c.stdout == ""
@@ -38,8 +35,8 @@ def test__run__mle():
 
 
 def test__run__rte():
-    a = shlex.split(get_command("tests/solutions/rte_tester.py"))
-    c = run(a, "", memory_limit=ml, time_limit=tl)
+    a = shlex.split(src.command.get_command("tests/solutions/rte_tester.py"))
+    c = src.run.run(a, "", memory_limit=ml, time_limit=tl)
     assert c.args == a
     assert c.returncode != 0
     assert c.stdout == ""
@@ -51,8 +48,8 @@ def test__run__rte():
 
 
 def test__run__tle():
-    a = shlex.split(get_command("tests/solutions/tle_tester.py"))
-    c = run(a, "", memory_limit=ml, time_limit=tl)
+    a = shlex.split(src.command.get_command("tests/solutions/tle_tester.py"))
+    c = src.run.run(a, "", memory_limit=ml, time_limit=tl)
     assert c.args == a
     assert c.returncode != 0
     assert c.stdout == ""
@@ -64,8 +61,8 @@ def test__run__tle():
 
 
 def test__run__wa():
-    a = shlex.split(get_command("tests/solutions/wa_tester.py"))
-    c = run(a, "", memory_limit=ml, time_limit=tl)
+    a = shlex.split(src.command.get_command("tests/solutions/wa_tester.py"))
+    c = src.run.run(a, "", memory_limit=ml, time_limit=tl)
     assert c.args == a
     assert c.returncode == 0
     assert c.stdout != ""
@@ -78,4 +75,4 @@ def test__run__wa():
 
 def test__run__no_exist():
     with pytest.raises(AssertionError):
-        run(["hopefullynothingiscalledthis"], "", memory_limit=ml, time_limit=tl)
+        src.run.run(["hopefullynothingiscalledthis"], "", memory_limit=ml, time_limit=tl)
