@@ -9,9 +9,7 @@ from typing import (
     Callable, Dict, Iterable, List, Sequence, Tuple, Union
 )
 
-from .judges import float_judge
-from .judges import identical_judge
-from .judges import default_judge
+from . import judges
 from . import run
 
 # The "input/output" format for the testing data is a list of strings.
@@ -41,9 +39,9 @@ WRONG_ANSWER: str = "Wrong Answer"
 
 # Define the built-in judging functions.
 JUDGES: Dict[str, JUDGE_TYPE] = {
-    "float": float_judge.float_judge,
-    "identical": identical_judge.identical_judge,
-    "default": default_judge.default_judge
+    "float": judges.float_judge,
+    "identical": judges.identical_judge,
+    "default": judges.default_judge
 }
 
 # Define the other utility constants.

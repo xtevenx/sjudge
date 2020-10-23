@@ -1,2 +1,2 @@
-from judges import *
-import judge
+from . import exercise
+from .judge import *
