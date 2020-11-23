@@ -146,6 +146,9 @@ class JudgeResult:
     def __iter__(self) -> Iterable[TestCaseResult]:
         return iter(self.testcases)
 
+    def __len__(self) -> int:
+        return self.testcases.__len__()
+
     def add_result(self, tc: TestCaseResult) -> None:
         """
         Add a test case to this set of tests.
